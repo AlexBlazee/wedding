@@ -27,14 +27,17 @@ const CONFIG = {
 };
 
 /* ============================================================
-   THREE.JS — JASMINE PETAL PARTICLE SYSTEM
+   THREE.JS — MANDAPAM MANDALA 3D HERO SCENE
+   Layered rotating mandalas + glowing center + gold dust + petals
+   + mouse-driven camera parallax
    ============================================================ */
 function initThreeJS() {
   const canvas = document.getElementById('hero-canvas');
   if (!canvas || typeof THREE === 'undefined') return;
 
   const isMobile = window.innerWidth < 768;
-  const PARTICLE_COUNT = isMobile ? 280 : 750;
+  const PARTICLE_COUNT = isMobile ? 240 : 600;
+  const DUST_COUNT     = isMobile ? 80  : 200;
 
   /* --- Renderer --- */
   const renderer = new THREE.WebGLRenderer({
@@ -45,14 +48,15 @@ function initThreeJS() {
   });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setClearColor(0x1A0A10, 1); // deep maroon hero background
+  renderer.setClearColor(0x14060B, 1); // deeper plum-ink
 
   /* --- Scene & Camera --- */
   const scene  = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.z = 6;
+  camera.position.set(0, 0, 6);
+  camera.lookAt(0, 0, 0);
 
-  /* --- Petal textures via CanvasTexture --- */
+  /* --- TEXTURE: petal (radial gradient blob) --- */
   function createPetalTexture(centerColor, outerColor) {
     const size = 64;
     const c    = document.createElement('canvas');
@@ -60,7 +64,7 @@ function initThreeJS() {
     const ctx = c.getContext('2d');
     ctx.save();
     ctx.translate(size / 2, size / 2);
-    ctx.scale(0.7, 1.4); // elongate for petal shape
+    ctx.scale(0.7, 1.4);
     const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, size * 0.48);
     grad.addColorStop(0,   centerColor);
     grad.addColorStop(0.5, outerColor);
@@ -73,15 +77,155 @@ function initThreeJS() {
     return new THREE.CanvasTexture(c);
   }
 
-  const jasmineTexture  = createPetalTexture('rgba(255,249,196,0.95)', 'rgba(255,255,255,0.7)');
-  const marigoldTexture = createPetalTexture('rgba(255,193,7,0.95)',   'rgba(255,152,0,0.6)');
+  /* --- TEXTURE: tiny round gold dust --- */
+  function createDustTexture() {
+    const size = 32;
+    const c    = document.createElement('canvas');
+    c.width = c.height = size;
+    const ctx = c.getContext('2d');
+    const g = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+    g.addColorStop(0,   'rgba(255,237,170,1)');
+    g.addColorStop(0.4, 'rgba(229,136,33,0.7)');
+    g.addColorStop(1,   'rgba(229,136,33,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, size, size);
+    return new THREE.CanvasTexture(c);
+  }
 
-  /* --- Build one particle system --- */
-  function buildParticles(count, texture, size, zRange) {
+  /* --- TEXTURE: hand-drawn mandala (canvas) --- */
+  function createMandalaTexture(size) {
+    const c   = document.createElement('canvas');
+    c.width = c.height = size;
+    const ctx = c.getContext('2d');
+    ctx.translate(size/2, size/2);
+    const R = size * 0.46;
+
+    ctx.strokeStyle = 'rgba(232, 199, 110, 0.95)';
+
+    // Concentric rings
+    [R, R*0.85, R*0.65, R*0.45, R*0.28, R*0.14].forEach((r, i) => {
+      ctx.lineWidth = i % 2 === 0 ? 2 : 1;
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, Math.PI * 2);
+      ctx.stroke();
+    });
+
+    // 16 outer petals
+    ctx.lineWidth = 1.5;
+    for (let i = 0; i < 16; i++) {
+      ctx.save();
+      ctx.rotate((i / 16) * Math.PI * 2);
+      ctx.beginPath();
+      ctx.moveTo(0, -R);
+      ctx.bezierCurveTo(R*0.10, -R*0.85, R*0.10, -R*0.70, 0, -R*0.62);
+      ctx.bezierCurveTo(-R*0.10, -R*0.70, -R*0.10, -R*0.85, 0, -R);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // 32 short spokes in middle ring
+    ctx.lineWidth = 0.8;
+    for (let i = 0; i < 32; i++) {
+      ctx.save();
+      ctx.rotate((i / 32) * Math.PI * 2);
+      ctx.beginPath();
+      ctx.moveTo(0, -R*0.45);
+      ctx.lineTo(0, -R*0.62);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // 8 filled inner saffron petals
+    ctx.fillStyle = 'rgba(229, 136, 33, 0.55)';
+    for (let i = 0; i < 8; i++) {
+      ctx.save();
+      ctx.rotate((i / 8) * Math.PI * 2);
+      ctx.beginPath();
+      ctx.moveTo(0, -R*0.45);
+      ctx.bezierCurveTo(R*0.10, -R*0.32, R*0.10, -R*0.18, 0, -R*0.10);
+      ctx.bezierCurveTo(-R*0.10, -R*0.18, -R*0.10, -R*0.32, 0, -R*0.45);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    // Center jewel (gold)
+    ctx.fillStyle = 'rgba(255, 237, 170, 0.95)';
+    ctx.beginPath();
+    ctx.arc(0, 0, R*0.06, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(232, 199, 110, 1)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(0, 0, R*0.10, 0, Math.PI * 2);
+    ctx.stroke();
+
+    return new THREE.CanvasTexture(c);
+  }
+
+  /* --- TEXTURE: glowing aureola --- */
+  function createGlowTexture() {
+    const size = 256;
+    const c    = document.createElement('canvas');
+    c.width = c.height = size;
+    const ctx = c.getContext('2d');
+    const g = ctx.createRadialGradient(size/2, size/2, 0, size/2, size/2, size/2);
+    g.addColorStop(0,    'rgba(255, 220, 130, 0.85)');
+    g.addColorStop(0.25, 'rgba(229, 136, 33, 0.45)');
+    g.addColorStop(0.6,  'rgba(126, 20, 48, 0.18)');
+    g.addColorStop(1,    'rgba(20, 6, 11, 0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, size, size);
+    return new THREE.CanvasTexture(c);
+  }
+
+  /* --- LAYER: aureola glow (deepest) --- */
+  const glowMat = new THREE.SpriteMaterial({
+    map: createGlowTexture(),
+    transparent: true,
+    opacity: 0.85,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const glow = new THREE.Sprite(glowMat);
+  glow.position.set(0, 0.4, -5.5);
+  glow.scale.set(11, 11, 1);
+  scene.add(glow);
+
+  /* --- LAYER: large back mandala (slow CCW) --- */
+  const backMandalaTex = createMandalaTexture(512);
+  const backMandala = new THREE.Mesh(
+    new THREE.PlaneGeometry(11, 11),
+    new THREE.MeshBasicMaterial({
+      map: backMandalaTex,
+      transparent: true,
+      opacity: 0.22,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    })
+  );
+  backMandala.position.z = -4;
+  scene.add(backMandala);
+
+  /* --- LAYER: smaller mid mandala (CW, opposite direction) --- */
+  const midMandala = new THREE.Mesh(
+    new THREE.PlaneGeometry(6.5, 6.5),
+    new THREE.MeshBasicMaterial({
+      map: backMandalaTex,
+      transparent: true,
+      opacity: 0.16,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    })
+  );
+  midMandala.position.z = -2.4;
+  scene.add(midMandala);
+
+  /* --- PARTICLE SYSTEMS --- */
+  function buildParticles(count, texture, size, zRange, sx, sy) {
     const geo       = new THREE.BufferGeometry();
     const positions = new Float32Array(count * 3);
-    const SPREAD_X  = 14;
-    const SPREAD_Y  = 8;
+    const SPREAD_X  = sx;
+    const SPREAD_Y  = sy;
 
     for (let i = 0; i < count; i++) {
       positions[i * 3]     = (Math.random() - 0.5) * SPREAD_X;
@@ -92,31 +236,49 @@ function initThreeJS() {
 
     const mat = new THREE.PointsMaterial({
       size,
-      map:            texture,
-      transparent:    true,
-      depthWrite:     false,
-      blending:       THREE.AdditiveBlending,
+      map:             texture,
+      transparent:     true,
+      depthWrite:      false,
+      blending:        THREE.AdditiveBlending,
       sizeAttenuation: true,
-      opacity:        0.88,
+      opacity:         0.88,
     });
 
     const points = new THREE.Points(geo, mat);
-
-    // Per-particle data stored alongside
     const velocities  = new Float32Array(count).map(() => -(0.006 + Math.random() * 0.014));
     const swayOffsets = new Float32Array(count).map(() => Math.random() * Math.PI * 2);
-
     return { points, geo, velocities, swayOffsets, SPREAD_X, SPREAD_Y };
   }
 
-  const jasmineCount  = Math.floor(PARTICLE_COUNT * 0.62);
+  const jasmineTexture  = createPetalTexture('rgba(255,249,196,0.95)', 'rgba(255,255,255,0.7)');
+  const marigoldTexture = createPetalTexture('rgba(255,193,7,0.95)',   'rgba(255,152,0,0.6)');
+  const dustTexture     = createDustTexture();
+
+  const jasmineCount  = Math.floor(PARTICLE_COUNT * 0.55);
   const marigoldCount = PARTICLE_COUNT - jasmineCount;
 
-  const jasmine  = buildParticles(jasmineCount,  jasmineTexture,  0.13, 4);
-  const marigold = buildParticles(marigoldCount, marigoldTexture, 0.18, 3);
+  const jasmine  = buildParticles(jasmineCount,  jasmineTexture,  0.13, 4, 14, 8);
+  const marigold = buildParticles(marigoldCount, marigoldTexture, 0.18, 3, 14, 8);
+  const dust     = buildParticles(DUST_COUNT,    dustTexture,     0.06, 5, 12, 7);
+
+  // Slower drift for dust — feels like temple-lamp embers
+  for (let i = 0; i < dust.velocities.length; i++) {
+    dust.velocities[i] = -(0.001 + Math.random() * 0.004);
+  }
 
   scene.add(jasmine.points);
   scene.add(marigold.points);
+  scene.add(dust.points);
+
+  /* --- Mouse-driven camera parallax --- */
+  const target = { x: 0, y: 0 };
+  const cur    = { x: 0, y: 0 };
+  if (!isMobile) {
+    window.addEventListener('mousemove', e => {
+      target.x = (e.clientX / window.innerWidth  - 0.5) * 0.6;
+      target.y = (e.clientY / window.innerHeight - 0.5) * 0.4;
+    }, { passive: true });
+  }
 
   /* --- Hero visibility observer (pause when off-screen) --- */
   let heroVisible = true;
@@ -167,8 +329,28 @@ function initThreeJS() {
     animFrame = requestAnimationFrame(animate);
     if (!heroVisible) return;
     time += 0.016;
+
+    // Camera parallax (lerp toward target)
+    cur.x += (target.x - cur.x) * 0.05;
+    cur.y += (target.y - cur.y) * 0.05;
+    camera.position.x =  cur.x;
+    camera.position.y = -cur.y;
+    camera.lookAt(0, 0, 0);
+
+    // Mandala rotations + breathing scale
+    backMandala.rotation.z += 0.0014;
+    midMandala.rotation.z  -= 0.0022;
+    const breath = 1 + Math.sin(time * 0.4) * 0.025;
+    midMandala.scale.set(breath, breath, 1);
+
+    // Aureola pulse
+    const pulse = 11 + Math.sin(time * 0.5) * 0.55;
+    glow.scale.set(pulse, pulse, 1);
+    glow.material.opacity = 0.78 + Math.sin(time * 0.5) * 0.10;
+
     animateParticles(jasmine);
     animateParticles(marigold);
+    animateParticles(dust);
     renderer.render(scene, camera);
   }
 
@@ -797,6 +979,41 @@ function initPhotoUpload() {
 }
 
 /* ============================================================
+   3D CARD TILT — mouse-driven rotateX/rotateY for cards
+   Skipped on touch / mobile / reduced-motion to keep things calm
+   ============================================================ */
+function init3DTilt() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.matchMedia('(hover: none)').matches)                    return;
+  if (window.innerWidth < 900)                                       return;
+
+  const targets = document.querySelectorAll(
+    '.couple__frame, .details__card, .hotel__card, .memories__card, .map-frame'
+  );
+  const MAX = 7; // degrees
+
+  targets.forEach(el => {
+    let raf;
+    el.addEventListener('mousemove', e => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const rect = el.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width;
+        const y = (e.clientY - rect.top)  / rect.height;
+        const rotX = (0.5 - y) * MAX;
+        const rotY = (x - 0.5) * MAX;
+        el.style.transform =
+          `perspective(1200px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateZ(8px)`;
+      });
+    });
+    el.addEventListener('mouseleave', () => {
+      cancelAnimationFrame(raf);
+      el.style.transform = '';
+    });
+  });
+}
+
+/* ============================================================
    BOOT — DOMContentLoaded
    ============================================================ */
 document.addEventListener('DOMContentLoaded', () => {
@@ -828,4 +1045,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // 7. Photo upload (Share Your Memories)
   initPhotoUpload();
+
+  // 8. 3D card tilt
+  init3DTilt();
 });

@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel+Decorative:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css?v=3"/>
+  <link rel="stylesheet" href="style.css?v=4"/>
 </head>
 <body>
 
@@ -107,6 +107,93 @@
 
       <!-- Hero text content -->
       <div class="hero__content">
+
+        <!-- Ganesh medallion — invocation at the top of every Hindu wedding -->
+        <div class="ganesh-medallion" aria-hidden="true">
+          <div class="ganesh-medallion__halo"></div>
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <radialGradient id="mg-bg" cx="50%" cy="42%" r="55%">
+                <stop offset="0%"   stop-color="#7E1430"/>
+                <stop offset="55%"  stop-color="#5C0A1F"/>
+                <stop offset="100%" stop-color="#2C0510"/>
+              </radialGradient>
+              <linearGradient id="mg-gold" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%"   stop-color="#F2A93A"/>
+                <stop offset="45%"  stop-color="#E8C76E"/>
+                <stop offset="80%"  stop-color="#D4AF37"/>
+                <stop offset="100%" stop-color="#A8841C"/>
+              </linearGradient>
+            </defs>
+
+            <!-- 16-petal lotus mandala ring -->
+            <g transform="translate(100,100)" fill="url(#mg-gold)">
+              <g id="mg-petal"><path d="M0,-94 Q5,-80 0,-72 Q-5,-80 0,-94"/></g>
+              <use href="#mg-petal" transform="rotate(22.5)"/>
+              <use href="#mg-petal" transform="rotate(45)"/>
+              <use href="#mg-petal" transform="rotate(67.5)"/>
+              <use href="#mg-petal" transform="rotate(90)"/>
+              <use href="#mg-petal" transform="rotate(112.5)"/>
+              <use href="#mg-petal" transform="rotate(135)"/>
+              <use href="#mg-petal" transform="rotate(157.5)"/>
+              <use href="#mg-petal" transform="rotate(180)"/>
+              <use href="#mg-petal" transform="rotate(202.5)"/>
+              <use href="#mg-petal" transform="rotate(225)"/>
+              <use href="#mg-petal" transform="rotate(247.5)"/>
+              <use href="#mg-petal" transform="rotate(270)"/>
+              <use href="#mg-petal" transform="rotate(292.5)"/>
+              <use href="#mg-petal" transform="rotate(315)"/>
+              <use href="#mg-petal" transform="rotate(337.5)"/>
+            </g>
+
+            <!-- Mandala rings -->
+            <circle cx="100" cy="100" r="73" fill="none" stroke="url(#mg-gold)" stroke-width="1.5"/>
+            <circle cx="100" cy="100" r="69" fill="none" stroke="url(#mg-gold)" stroke-width="0.4"/>
+            <circle cx="100" cy="100" r="65" fill="url(#mg-bg)"/>
+            <circle cx="100" cy="100" r="65" fill="none" stroke="url(#mg-gold)" stroke-width="0.5" stroke-dasharray="1.5 1.5" opacity="0.7"/>
+
+            <!-- Ganesh figure -->
+            <g fill="url(#mg-gold)">
+              <!-- Crown kalasha -->
+              <path d="M86,55 L100,38 L114,55 L100,52 Z"/>
+              <ellipse cx="100" cy="38" rx="2" ry="3"/>
+              <line x1="100" y1="35" x2="100" y2="32" stroke="url(#mg-gold)" stroke-width="1.2"/>
+              <circle cx="100" cy="30" r="1.4"/>
+              <path d="M82,57 Q100,50 118,57 L118,62 Q100,55 82,62 Z"/>
+
+              <!-- Head dome -->
+              <path d="M84,62 Q82,85 92,98 L108,98 Q118,85 116,62 Q100,55 84,62 Z"/>
+
+              <!-- Big fan ears -->
+              <path d="M84,66 Q66,68 60,84 Q58,98 70,108 Q80,110 84,98 Q82,82 84,66 Z" opacity="0.95"/>
+              <path d="M116,66 Q134,68 140,84 Q142,98 130,108 Q120,110 116,98 Q118,82 116,66 Z" opacity="0.95"/>
+              <path d="M76,76 Q70,86 76,98" fill="none" stroke="#5C0A1F" stroke-width="0.7" opacity="0.85"/>
+              <path d="M124,76 Q130,86 124,98" fill="none" stroke="#5C0A1F" stroke-width="0.7" opacity="0.85"/>
+
+              <!-- Forehead tripundra tilaka -->
+              <path d="M94,72 L94,82 M100,70 L100,82 M106,72 L106,82" stroke="#5C0A1F" stroke-width="1.4" opacity="0.85" stroke-linecap="round"/>
+              <circle cx="100" cy="86" r="1.7" fill="#E58821"/>
+
+              <!-- Eyes -->
+              <ellipse cx="92" cy="92" rx="2.2" ry="1.4" fill="#2C0510"/>
+              <ellipse cx="108" cy="92" rx="2.2" ry="1.4" fill="#2C0510"/>
+
+              <!-- Auspicious right-curled trunk -->
+              <path d="M97,100 Q98,108 96,118 Q92,130 102,138 Q116,140 122,134 Q126,128 122,124 Q117,127 110,126 Q104,123 102,116 Q102,108 103,100 Z"/>
+              <path d="M98,108 Q92,108 92,114" fill="none" stroke="#A8841C" stroke-width="0.5"/>
+              <path d="M93,118 Q88,124 96,128" fill="none" stroke="#A8841C" stroke-width="0.5"/>
+              <path d="M100,128 Q108,134 116,132" fill="none" stroke="#A8841C" stroke-width="0.5"/>
+
+              <!-- Tusks (one shorter — traditional Eka-danta iconography) -->
+              <path d="M91,104 L88,114" stroke="#FFF6E4" stroke-width="2.2" stroke-linecap="round"/>
+              <path d="M109,104 L111,109" stroke="#FFF6E4" stroke-width="2" stroke-linecap="round"/>
+            </g>
+          </svg>
+        </div>
+
+        <p class="hero__sanskrit" lang="sa">श्री गणेशाय नमः</p>
+        <p class="hero__sanskrit-translit">Shri Ganeshaya Namaha</p>
+
         <p class="hero__pretext">Together with their families invite you to celebrate</p>
         <!-- PLACEHOLDER: Replace "Meenakshi" with bride's actual name -->
         <h1 class="hero__bride-name">Meenakshi</h1>
@@ -541,24 +628,60 @@
   <div id="celebration-overlay" class="celebration-overlay">
     <div class="celebration-card" role="dialog" aria-modal="true" aria-labelledby="celebration-title">
 
-      <div class="celebration-lotus" aria-hidden="true">
-        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
-          <g transform="translate(40,40)">
-            <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.85"/>
-            <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.85" transform="rotate(45)"/>
-            <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.85" transform="rotate(90)"/>
-            <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.85" transform="rotate(135)"/>
-            <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.85" transform="rotate(180)"/>
-            <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.85" transform="rotate(225)"/>
-            <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.85" transform="rotate(270)"/>
-            <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.85" transform="rotate(315)"/>
+      <div class="ganesh-medallion" aria-hidden="true">
+        <div class="ganesh-medallion__halo"></div>
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <radialGradient id="cmg-bg" cx="50%" cy="42%" r="55%">
+              <stop offset="0%"   stop-color="#7E1430"/>
+              <stop offset="55%"  stop-color="#5C0A1F"/>
+              <stop offset="100%" stop-color="#2C0510"/>
+            </radialGradient>
+            <linearGradient id="cmg-gold" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%"   stop-color="#F2A93A"/>
+              <stop offset="45%"  stop-color="#E8C76E"/>
+              <stop offset="80%"  stop-color="#D4AF37"/>
+              <stop offset="100%" stop-color="#A8841C"/>
+            </linearGradient>
+          </defs>
+          <g transform="translate(100,100)" fill="url(#cmg-gold)">
+            <g id="cmg-petal"><path d="M0,-94 Q5,-80 0,-72 Q-5,-80 0,-94"/></g>
+            <use href="#cmg-petal" transform="rotate(22.5)"/><use href="#cmg-petal" transform="rotate(45)"/>
+            <use href="#cmg-petal" transform="rotate(67.5)"/><use href="#cmg-petal" transform="rotate(90)"/>
+            <use href="#cmg-petal" transform="rotate(112.5)"/><use href="#cmg-petal" transform="rotate(135)"/>
+            <use href="#cmg-petal" transform="rotate(157.5)"/><use href="#cmg-petal" transform="rotate(180)"/>
+            <use href="#cmg-petal" transform="rotate(202.5)"/><use href="#cmg-petal" transform="rotate(225)"/>
+            <use href="#cmg-petal" transform="rotate(247.5)"/><use href="#cmg-petal" transform="rotate(270)"/>
+            <use href="#cmg-petal" transform="rotate(292.5)"/><use href="#cmg-petal" transform="rotate(315)"/>
+            <use href="#cmg-petal" transform="rotate(337.5)"/>
           </g>
-          <circle cx="40" cy="40" r="9" fill="#D4AF37"/>
-          <circle cx="40" cy="40" r="4" fill="#FFF9C4"/>
+          <circle cx="100" cy="100" r="73" fill="none" stroke="url(#cmg-gold)" stroke-width="1.5"/>
+          <circle cx="100" cy="100" r="65" fill="url(#cmg-bg)"/>
+          <circle cx="100" cy="100" r="65" fill="none" stroke="url(#cmg-gold)" stroke-width="0.5" stroke-dasharray="1.5 1.5" opacity="0.7"/>
+          <g fill="url(#cmg-gold)">
+            <path d="M86,55 L100,38 L114,55 L100,52 Z"/>
+            <ellipse cx="100" cy="38" rx="2" ry="3"/>
+            <line x1="100" y1="35" x2="100" y2="32" stroke="url(#cmg-gold)" stroke-width="1.2"/>
+            <circle cx="100" cy="30" r="1.4"/>
+            <path d="M82,57 Q100,50 118,57 L118,62 Q100,55 82,62 Z"/>
+            <path d="M84,62 Q82,85 92,98 L108,98 Q118,85 116,62 Q100,55 84,62 Z"/>
+            <path d="M84,66 Q66,68 60,84 Q58,98 70,108 Q80,110 84,98 Q82,82 84,66 Z" opacity="0.95"/>
+            <path d="M116,66 Q134,68 140,84 Q142,98 130,108 Q120,110 116,98 Q118,82 116,66 Z" opacity="0.95"/>
+            <path d="M76,76 Q70,86 76,98" fill="none" stroke="#5C0A1F" stroke-width="0.7"/>
+            <path d="M124,76 Q130,86 124,98" fill="none" stroke="#5C0A1F" stroke-width="0.7"/>
+            <path d="M94,72 L94,82 M100,70 L100,82 M106,72 L106,82" stroke="#5C0A1F" stroke-width="1.4" stroke-linecap="round"/>
+            <circle cx="100" cy="86" r="1.7" fill="#E58821"/>
+            <ellipse cx="92" cy="92" rx="2.2" ry="1.4" fill="#2C0510"/>
+            <ellipse cx="108" cy="92" rx="2.2" ry="1.4" fill="#2C0510"/>
+            <path d="M97,100 Q98,108 96,118 Q92,130 102,138 Q116,140 122,134 Q126,128 122,124 Q117,127 110,126 Q104,123 102,116 Q102,108 103,100 Z"/>
+            <path d="M91,104 L88,114" stroke="#FFF6E4" stroke-width="2.2" stroke-linecap="round"/>
+            <path d="M109,104 L111,109" stroke="#FFF6E4" stroke-width="2" stroke-linecap="round"/>
+          </g>
         </svg>
       </div>
 
       <p class="celebration-eyebrow">✦ Shubhamastu ✦</p>
+      <p class="celebration-sanskrit" lang="sa">श्री गणेशाय नमः</p>
       <h2 class="celebration-title" id="celebration-title">We're Overjoyed!</h2>
       <p class="celebration-subtitle">Your presence makes our day complete</p>
 
@@ -586,7 +709,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-  <script src="main.js?v=3"></script>
+  <script src="main.js?v=4"></script>
 
 </body>
 </html>
