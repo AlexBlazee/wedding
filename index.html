@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+  <meta name="description" content="Wedding celebration of Meenakshi &amp; Arjun — January 15, 2026"/>
+  <title>Meenakshi &amp; Arjun — Wedding</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel+Decorative:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css?v=3"/>
+</head>
+<body>
+
+  <!-- Three.js particle canvas — fixed background, pointer-events:none -->
+  <canvas id="hero-canvas" aria-hidden="true"></canvas>
+
+  <!-- Sticky navigation -->
+  <nav id="top-nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <span class="nav-monogram">M &amp; A</span>
+      <ul class="nav-links">
+        <li><a href="#rsvp">RSVP</a></li>
+        <li><a href="#venue">Venue</a></li>
+        <li><a href="#accommodation">Stay</a></li>
+        <li><a href="#memories">Memories</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ======================================================
+         HERO
+         ====================================================== -->
+    <section id="hero" class="section section--hero">
+
+      <!-- Temple gopuram silhouette (bottom, decorative) -->
+      <div class="hero__gopuram" aria-hidden="true">
+        <svg viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax meet">
+          <rect x="50" y="290" width="400" height="30" rx="2" fill="currentColor"/>
+          <rect x="215" y="240" width="70" height="50" fill="currentColor"/>
+          <path d="M215 240 Q215 210 250 210 Q285 210 285 240" fill="currentColor"/>
+          <polygon points="30,290 470,290 440,240 60,240" fill="currentColor"/>
+          <polygon points="60,240 440,240 415,195 85,195" fill="currentColor"/>
+          <polygon points="85,195 415,195 393,155 107,155" fill="currentColor"/>
+          <polygon points="107,155 393,155 373,120 127,120" fill="currentColor"/>
+          <polygon points="127,120 373,120 355,90 145,90" fill="currentColor"/>
+          <polygon points="145,90 355,90 340,65 160,65" fill="currentColor"/>
+          <ellipse cx="250" cy="52" rx="28" ry="20" fill="currentColor"/>
+          <ellipse cx="250" cy="33" rx="13" ry="16" fill="currentColor"/>
+          <circle cx="250" cy="16" r="9" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <!-- Kolam mandala (slow-rotating background ornament) -->
+      <div class="hero__mandala" aria-hidden="true">
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <g fill="none" stroke="currentColor">
+            <circle cx="200" cy="200" r="192" stroke-width="1"/>
+            <circle cx="200" cy="200" r="172" stroke-width="0.5"/>
+            <circle cx="200" cy="200" r="150" stroke-width="1"/>
+            <circle cx="200" cy="200" r="125" stroke-width="0.5"/>
+            <circle cx="200" cy="200" r="100" stroke-width="1"/>
+            <circle cx="200" cy="200" r="75" stroke-width="0.5"/>
+            <circle cx="200" cy="200" r="50" stroke-width="1"/>
+            <circle cx="200" cy="200" r="25" stroke-width="0.5"/>
+          </g>
+          <!-- 8 outer petals -->
+          <g transform="translate(200,200)" fill="none" stroke="currentColor" stroke-width="1">
+            <path d="M0,-192 Q45,-150 0,-110 Q-45,-150 0,-192"/>
+            <path d="M0,-192 Q45,-150 0,-110 Q-45,-150 0,-192" transform="rotate(45)"/>
+            <path d="M0,-192 Q45,-150 0,-110 Q-45,-150 0,-192" transform="rotate(90)"/>
+            <path d="M0,-192 Q45,-150 0,-110 Q-45,-150 0,-192" transform="rotate(135)"/>
+            <path d="M0,-192 Q45,-150 0,-110 Q-45,-150 0,-192" transform="rotate(180)"/>
+            <path d="M0,-192 Q45,-150 0,-110 Q-45,-150 0,-192" transform="rotate(225)"/>
+            <path d="M0,-192 Q45,-150 0,-110 Q-45,-150 0,-192" transform="rotate(270)"/>
+            <path d="M0,-192 Q45,-150 0,-110 Q-45,-150 0,-192" transform="rotate(315)"/>
+          </g>
+          <!-- 16 radial spokes (middle ring) -->
+          <g transform="translate(200,200)" stroke="currentColor" stroke-width="0.5">
+            <line y1="-150" y2="-75"/><line y1="-150" y2="-75" transform="rotate(22.5)"/>
+            <line y1="-150" y2="-75" transform="rotate(45)"/><line y1="-150" y2="-75" transform="rotate(67.5)"/>
+            <line y1="-150" y2="-75" transform="rotate(90)"/><line y1="-150" y2="-75" transform="rotate(112.5)"/>
+            <line y1="-150" y2="-75" transform="rotate(135)"/><line y1="-150" y2="-75" transform="rotate(157.5)"/>
+            <line y1="-150" y2="-75" transform="rotate(180)"/><line y1="-150" y2="-75" transform="rotate(202.5)"/>
+            <line y1="-150" y2="-75" transform="rotate(225)"/><line y1="-150" y2="-75" transform="rotate(247.5)"/>
+            <line y1="-150" y2="-75" transform="rotate(270)"/><line y1="-150" y2="-75" transform="rotate(292.5)"/>
+            <line y1="-150" y2="-75" transform="rotate(315)"/><line y1="-150" y2="-75" transform="rotate(337.5)"/>
+          </g>
+          <!-- 8 inner filled petals -->
+          <g transform="translate(200,200)" fill="currentColor" opacity="0.18">
+            <path d="M0,-75 Q22,-50 0,-28 Q-22,-50 0,-75"/>
+            <path d="M0,-75 Q22,-50 0,-28 Q-22,-50 0,-75" transform="rotate(45)"/>
+            <path d="M0,-75 Q22,-50 0,-28 Q-22,-50 0,-75" transform="rotate(90)"/>
+            <path d="M0,-75 Q22,-50 0,-28 Q-22,-50 0,-75" transform="rotate(135)"/>
+            <path d="M0,-75 Q22,-50 0,-28 Q-22,-50 0,-75" transform="rotate(180)"/>
+            <path d="M0,-75 Q22,-50 0,-28 Q-22,-50 0,-75" transform="rotate(225)"/>
+            <path d="M0,-75 Q22,-50 0,-28 Q-22,-50 0,-75" transform="rotate(270)"/>
+            <path d="M0,-75 Q22,-50 0,-28 Q-22,-50 0,-75" transform="rotate(315)"/>
+          </g>
+          <circle cx="200" cy="200" r="18" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="200" cy="200" r="8" fill="currentColor" opacity="0.35"/>
+        </svg>
+      </div>
+
+      <!-- Hero text content -->
+      <div class="hero__content">
+        <p class="hero__pretext">Together with their families invite you to celebrate</p>
+        <!-- PLACEHOLDER: Replace "Meenakshi" with bride's actual name -->
+        <h1 class="hero__bride-name">Meenakshi</h1>
+        <div class="hero__ampersand">&amp;</div>
+        <!-- PLACEHOLDER: Replace "Arjun" with groom's actual name -->
+        <h1 class="hero__groom-name">Arjun</h1>
+
+        <!-- Jasmine garland divider (stroke animated by GSAP) -->
+        <div class="hero__divider">
+          <svg class="divider-svg" viewBox="0 0 320 36" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path class="divider-path" d="M10,18 Q40,6 70,18 Q100,30 130,18 Q160,6 190,18 Q220,30 250,18 Q280,6 310,18" fill="none" stroke="#D4AF37" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="70"  cy="18" r="4.5" fill="#D4AF37"/><circle cx="70"  cy="18" r="2" fill="#FFF9C4"/>
+            <circle cx="130" cy="18" r="4.5" fill="#D4AF37"/><circle cx="130" cy="18" r="2" fill="#FFF9C4"/>
+            <circle cx="190" cy="18" r="4.5" fill="#D4AF37"/><circle cx="190" cy="18" r="2" fill="#FFF9C4"/>
+            <circle cx="250" cy="18" r="4.5" fill="#D4AF37"/><circle cx="250" cy="18" r="2" fill="#FFF9C4"/>
+          </svg>
+        </div>
+
+        <!-- PLACEHOLDER: Replace date and time with actual wedding details -->
+        <p class="hero__date">January 15, 2026</p>
+        <p class="hero__time">Muhurtham at 9:00 AM</p>
+      </div>
+
+      <div class="hero__scroll-indicator" aria-hidden="true">
+        <span class="scroll-text">Scroll</span>
+        <div class="scroll-arrow"></div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         THE COUPLE
+         ====================================================== -->
+    <section id="couple" class="section section--couple">
+      <div class="section__header">
+        <p class="section__preheader">With the Blessings of the Almighty</p>
+        <h2 class="section__title">The Couple</h2>
+        <div class="section__kolam-line" aria-hidden="true"><!-- reusable divider --></div>
+      </div>
+
+      <div class="couple__grid">
+        <!-- Bride card — PLACEHOLDER IMAGE: replace src with actual bride photo -->
+        <div class="couple__card couple__card--bride">
+          <div class="couple__frame">
+            <img class="couple__photo"
+              src="https://picsum.photos/seed/bride2025/480/600"
+              alt="Bride Meenakshi"
+              loading="lazy"/>
+            <div class="couple__frame-border"></div>
+            <div class="couple__frame-corner couple__frame-corner--tl"></div>
+            <div class="couple__frame-corner couple__frame-corner--tr"></div>
+            <div class="couple__frame-corner couple__frame-corner--bl"></div>
+            <div class="couple__frame-corner couple__frame-corner--br"></div>
+          </div>
+          <!-- PLACEHOLDER: Update names and parents -->
+          <h3 class="couple__name">Meenakshi</h3>
+          <p class="couple__subtitle">Daughter of<br/>Sri Ramesh &amp; Smt. Kamala</p>
+        </div>
+
+        <!-- Lotus divider -->
+        <div class="couple__divider" aria-hidden="true">
+          <svg class="lotus-svg" viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+            <g transform="translate(40,40)">
+              <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.75"/>
+              <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.75" transform="rotate(45)"/>
+              <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.75" transform="rotate(90)"/>
+              <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.75" transform="rotate(135)"/>
+              <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.75" transform="rotate(180)"/>
+              <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.75" transform="rotate(225)"/>
+              <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.75" transform="rotate(270)"/>
+              <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.75" transform="rotate(315)"/>
+            </g>
+            <circle cx="40" cy="40" r="9" fill="#D4AF37"/>
+            <circle cx="40" cy="40" r="4" fill="#FFF9C4"/>
+          </svg>
+        </div>
+
+        <!-- Groom card — PLACEHOLDER IMAGE: replace src with actual groom photo -->
+        <div class="couple__card couple__card--groom">
+          <div class="couple__frame">
+            <img class="couple__photo"
+              src="https://picsum.photos/seed/groom2025/480/600"
+              alt="Groom Arjun"
+              loading="lazy"/>
+            <div class="couple__frame-border"></div>
+            <div class="couple__frame-corner couple__frame-corner--tl"></div>
+            <div class="couple__frame-corner couple__frame-corner--tr"></div>
+            <div class="couple__frame-corner couple__frame-corner--bl"></div>
+            <div class="couple__frame-corner couple__frame-corner--br"></div>
+          </div>
+          <!-- PLACEHOLDER: Update names and parents -->
+          <h3 class="couple__name">Arjun</h3>
+          <p class="couple__subtitle">Son of<br/>Sri Suresh &amp; Smt. Lakshmi</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         CELEBRATIONS / WEDDING DETAILS
+         ====================================================== -->
+    <section id="wedding-details" class="section section--details">
+      <div class="section__header">
+        <p class="section__preheader">Mark Your Calendar</p>
+        <h2 class="section__title">Celebrations</h2>
+        <div class="section__kolam-line" aria-hidden="true"></div>
+      </div>
+
+      <div class="details__grid">
+        <!-- PLACEHOLDER: Update ceremony details -->
+        <div class="details__card">
+          <div class="details__icon">
+            <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14,38 Q10,28 14,20 Q18,14 24,14 Q30,14 34,20 Q38,28 34,38Z" fill="#D4AF37" opacity="0.55"/>
+              <ellipse cx="24" cy="38" rx="10" ry="3.5" fill="#C22544" opacity="0.35"/>
+              <path d="M24,14 Q22,9 24,5 Q26,9 24,14" fill="#FF8C00" opacity="0.9"/>
+              <path d="M24,5 Q23.2,2.5 24,1 Q24.8,2.5 24,5" fill="#FFF176"/>
+            </svg>
+          </div>
+          <h3 class="details__ceremony-name">Haldi Ceremony</h3>
+          <p class="details__date">January 14, 2026</p>
+          <p class="details__time">11:00 AM</p>
+          <p class="details__venue-ref">Bride's Residence, Chennai</p>
+        </div>
+
+        <div class="details__card details__card--featured">
+          <div class="details__icon">
+            <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+              <rect x="17" y="38" width="14" height="4" rx="1" fill="#D4AF37"/>
+              <path d="M15,38 Q11,28 13,19 Q16,12 24,11 Q32,12 35,19 Q37,28 33,38Z" fill="#D4AF37" opacity="0.65"/>
+              <ellipse cx="24" cy="11" rx="7" ry="3.5" fill="#D4AF37" opacity="0.8"/>
+              <circle cx="24" cy="7" r="3" fill="#287F54"/>
+              <line x1="24" y1="4" x2="24" y2="1" stroke="#287F54" stroke-width="1.5"/>
+              <circle cx="24" cy="1" r="2" fill="#287F54"/>
+            </svg>
+          </div>
+          <h3 class="details__ceremony-name">Muhurtham</h3>
+          <p class="details__date">January 15, 2026</p>
+          <p class="details__time">9:00 AM — 11:30 AM</p>
+          <p class="details__venue-ref">Sri Lalitha Mahal Palace, Mysuru</p>
+        </div>
+
+        <div class="details__card">
+          <div class="details__icon">
+            <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+              <g transform="translate(24,24)">
+                <ellipse cx="0" cy="-13" rx="4.5" ry="7" fill="#FF8C00" opacity="0.85"/>
+                <ellipse cx="0" cy="-13" rx="4.5" ry="7" fill="#FF8C00" opacity="0.85" transform="rotate(45)"/>
+                <ellipse cx="0" cy="-13" rx="4.5" ry="7" fill="#FF8C00" opacity="0.85" transform="rotate(90)"/>
+                <ellipse cx="0" cy="-13" rx="4.5" ry="7" fill="#FF8C00" opacity="0.85" transform="rotate(135)"/>
+                <ellipse cx="0" cy="-13" rx="4.5" ry="7" fill="#FF8C00" opacity="0.85" transform="rotate(180)"/>
+                <ellipse cx="0" cy="-13" rx="4.5" ry="7" fill="#FF8C00" opacity="0.85" transform="rotate(225)"/>
+                <ellipse cx="0" cy="-13" rx="4.5" ry="7" fill="#FF8C00" opacity="0.85" transform="rotate(270)"/>
+                <ellipse cx="0" cy="-13" rx="4.5" ry="7" fill="#FF8C00" opacity="0.85" transform="rotate(315)"/>
+              </g>
+              <circle cx="24" cy="24" r="7" fill="#FFD700"/>
+              <circle cx="24" cy="24" r="3" fill="#FF8C00"/>
+            </svg>
+          </div>
+          <h3 class="details__ceremony-name">Reception</h3>
+          <p class="details__date">January 15, 2026</p>
+          <p class="details__time">7:00 PM onwards</p>
+          <p class="details__venue-ref">Sri Lalitha Mahal Palace, Mysuru</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         RSVP
+         ====================================================== -->
+    <section id="rsvp" class="section section--rsvp">
+      <div class="section__header">
+        <p class="section__preheader">Kindly Respond by December 15, 2025</p>
+        <h2 class="section__title">RSVP</h2>
+        <div class="section__kolam-line" aria-hidden="true"></div>
+      </div>
+
+      <form id="rsvp-form" class="form form--rsvp" novalidate>
+        <div class="form__field">
+          <label class="form__label" for="rsvp-name">Full Name <span class="form__required">*</span></label>
+          <input class="form__input" id="rsvp-name" name="from_name" type="text"
+            autocomplete="name" placeholder="Your full name"/>
+          <span class="form__error" id="rsvp-name-error" role="alert"></span>
+        </div>
+
+        <div class="form__field">
+          <label class="form__label" for="rsvp-email">Email Address <span class="form__required">*</span></label>
+          <input class="form__input" id="rsvp-email" name="from_email" type="email"
+            autocomplete="email" placeholder="your@email.com"/>
+          <span class="form__error" id="rsvp-email-error" role="alert"></span>
+        </div>
+
+        <div class="form__field">
+          <label class="form__label" for="rsvp-phone">
+            Phone Number <span class="form__optional">(optional)</span>
+          </label>
+          <input class="form__input" id="rsvp-phone" name="phone" type="tel"
+            autocomplete="tel" placeholder="+91 98765 43210"/>
+        </div>
+
+        <div class="form__field">
+          <label class="form__label">Will You Attend? <span class="form__required">*</span></label>
+          <div class="attendance-toggle" id="attendance-toggle">
+            <button type="button" class="attendance-btn attendance-btn--yes" data-value="yes">Joyfully Accept</button>
+            <button type="button" class="attendance-btn attendance-btn--no"  data-value="no">Regretfully Decline</button>
+          </div>
+          <input type="hidden" id="rsvp-attending" name="attending" value=""/>
+          <span class="form__error" id="rsvp-attending-error" role="alert"></span>
+        </div>
+
+        <div class="form__field" id="guest-count-field" style="display:none">
+          <label class="form__label">Additional Guests</label>
+          <p class="form__hint">Count is required; individual names are optional.</p>
+          <div class="stepper">
+            <button type="button" class="stepper__btn stepper__btn--minus" id="guest-minus"
+              aria-label="Remove a guest" disabled>−</button>
+            <span class="stepper__value" id="guest-count-display" aria-live="polite">0</span>
+            <button type="button" class="stepper__btn stepper__btn--plus" id="guest-plus"
+              aria-label="Add a guest">+</button>
+          </div>
+          <input type="hidden" id="guest-count" name="guest_count" value="0"/>
+        </div>
+
+        <div id="guest-names-container" class="guest-names-container"></div>
+
+        <button type="submit" class="btn btn--primary btn--submit" id="rsvp-submit">
+          <span class="btn__text">Send RSVP</span>
+          <span class="btn__loading" hidden>Sending…</span>
+        </button>
+      </form>
+
+      <div id="rsvp-toast" class="toast" role="alert" aria-live="polite"></div>
+    </section>
+
+    <!-- ======================================================
+         VENUE
+         ====================================================== -->
+    <section id="venue" class="section section--venue">
+      <div class="section__header">
+        <p class="section__preheader">You Are Invited To</p>
+        <h2 class="section__title">Venue</h2>
+        <div class="section__kolam-line" aria-hidden="true"></div>
+      </div>
+
+      <div class="venue__content">
+        <div class="venue__info">
+          <!-- PLACEHOLDER: Update venue name, address, description -->
+          <h3 class="venue__name">Sri Lalitha Mahal Palace</h3>
+          <p class="venue__address">Nazarbad Mohalla, Mysuru, Karnataka 570010</p>
+          <p class="venue__description">
+            A majestic heritage palace in the royal city of Mysuru, offering
+            breathtaking gardens and magnificent architecture as the backdrop
+            for our most cherished celebration.
+          </p>
+          <div class="venue__actions">
+            <a class="btn btn--primary" id="btn-maps" href="#" target="_blank" rel="noopener noreferrer">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+              Open in Maps
+            </a>
+            <a class="btn btn--outline" id="btn-directions" href="#" target="_blank" rel="noopener noreferrer">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.71 11.29l-9-9c-.39-.39-1.02-.39-1.41 0l-9 9c-.39.39-.39 1.02 0 1.41l9 9c.39.39 1.02.39 1.41 0l9-9c.39-.38.39-1.01 0-1.41zM14 14.5V12h-4v3H8v-4c0-.55.45-1 1-1h5V7.5l3.5 3.5-3.5 3.5z"/></svg>
+              Get Directions
+            </a>
+          </div>
+        </div>
+
+        <div class="venue__map-placeholder">
+          <div class="map-frame">
+            <div class="map-grid-overlay" aria-hidden="true"></div>
+            <div class="map-pin-icon" aria-hidden="true"></div>
+            <p class="map-address-text">Sri Lalitha Mahal Palace<br/>Mysuru, Karnataka</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         ACCOMMODATION
+         ====================================================== -->
+    <section id="accommodation" class="section section--accommodation">
+      <div class="section__header">
+        <p class="section__preheader">We Have Arranged</p>
+        <h2 class="section__title">Stay With Us</h2>
+        <div class="section__kolam-line" aria-hidden="true"></div>
+      </div>
+
+      <div class="hotel__card">
+        <div class="hotel__info">
+          <span class="hotel__badge">Partner Hotel</span>
+          <!-- PLACEHOLDER: Update hotel name, address, description -->
+          <h3 class="hotel__name">Hotel Roopa</h3>
+          <p class="hotel__address">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            Bangalore-Nilgiri Road, Mysuru
+          </p>
+          <p class="hotel__description">
+            Our carefully chosen partner hotel offers comfortable rooms at
+            specially negotiated rates for wedding guests. Just 15 minutes
+            from the venue with complimentary breakfast included.
+          </p>
+        </div>
+
+        <div class="coupon__section">
+          <div class="coupon__icon" aria-hidden="true">
+            <svg viewBox="0 0 52 32" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="2" width="48" height="28" rx="3" fill="none" stroke="#D4AF37" stroke-width="1.5"/>
+              <circle cx="2" cy="16" r="5" fill="#FFF8F0" stroke="#D4AF37" stroke-width="1.5"/>
+              <circle cx="50" cy="16" r="5" fill="#FFF8F0" stroke="#D4AF37" stroke-width="1.5"/>
+              <line x1="15" y1="2" x2="15" y2="30" stroke="#D4AF37" stroke-width="1" stroke-dasharray="3,2"/>
+              <text x="32" y="20" text-anchor="middle" font-size="9" fill="#D4AF37" font-family="serif" letter-spacing="1">COUPON</text>
+            </svg>
+          </div>
+          <h4 class="coupon__title">Request Room Block Code</h4>
+          <p class="coupon__subtitle">Submit your request and we'll send you the coupon code personally.</p>
+
+          <form id="coupon-form" class="form form--coupon" novalidate>
+            <div class="form__field">
+              <label class="form__label" for="coupon-name">Your Name <span class="form__required">*</span></label>
+              <input class="form__input" id="coupon-name" name="requester_name" type="text"
+                autocomplete="name" placeholder="Your full name"/>
+              <span class="form__error" id="coupon-name-error" role="alert"></span>
+            </div>
+
+            <div class="form__field">
+              <label class="form__label" for="coupon-phone">Phone Number <span class="form__required">*</span></label>
+              <input class="form__input" id="coupon-phone" name="requester_phone" type="tel"
+                autocomplete="tel" placeholder="+91 98765 43210"/>
+              <span class="form__error" id="coupon-phone-error" role="alert"></span>
+            </div>
+
+            <div class="form__field">
+              <label class="form__label">Number of Rooms</label>
+              <div class="stepper">
+                <button type="button" class="stepper__btn stepper__btn--minus" id="room-minus"
+                  aria-label="Decrease rooms" disabled>−</button>
+                <span class="stepper__value" id="room-count-display" aria-live="polite">1</span>
+                <button type="button" class="stepper__btn stepper__btn--plus" id="room-plus"
+                  aria-label="Increase rooms">+</button>
+              </div>
+              <input type="hidden" id="room-count" name="room_count" value="1"/>
+              <input type="hidden" name="hotel_name" value="Hotel Roopa"/>
+            </div>
+
+            <button type="submit" class="btn btn--primary" id="coupon-submit">
+              <span class="btn__text">Request Code</span>
+              <span class="btn__loading" hidden>Sending…</span>
+            </button>
+          </form>
+
+          <div id="coupon-toast" class="toast" role="alert" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================
+         SHARE YOUR MEMORIES
+         ====================================================== -->
+    <section id="memories" class="section section--memories">
+      <div class="section__header">
+        <p class="section__preheader">Cherish Every Moment</p>
+        <h2 class="section__title">Share Your Memories</h2>
+        <div class="section__kolam-line" aria-hidden="true"></div>
+      </div>
+
+      <div class="memories__card">
+        <p class="memories__intro">
+          Did you capture a beautiful moment from the celebration? Share your photos
+          with Meenakshi &amp; Arjun so the whole family can relive the joy of this special day.
+        </p>
+
+        <div class="form__field memories__name-field">
+          <label class="form__label" for="uploader-name">
+            Your Name <span class="form__optional">(optional)</span>
+          </label>
+          <input class="form__input" id="uploader-name" type="text"
+            placeholder="So we know who shared these beautiful moments" autocomplete="name"/>
+        </div>
+
+        <div class="upload-dropzone" id="upload-dropzone"
+             role="button" tabindex="0" aria-label="Drop photos here or click to select">
+          <div class="upload-dropzone__icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="10" width="44" height="32" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>
+              <circle cx="24" cy="26" r="9" fill="none" stroke="currentColor" stroke-width="2"/>
+              <circle cx="24" cy="26" r="4" fill="currentColor" opacity="0.35"/>
+              <path d="M16,10 L19,5 L29,5 L32,10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="38" cy="18" r="2.5" fill="currentColor" opacity="0.55"/>
+            </svg>
+          </div>
+          <p class="upload-dropzone__title">Drag &amp; drop your photos here</p>
+          <p class="upload-dropzone__or">or</p>
+          <label class="btn btn--outline upload-dropzone__btn" for="photo-input">
+            Choose Photos
+          </label>
+          <p class="upload-dropzone__hint">JPG · PNG · HEIC &nbsp;·&nbsp; Up to 20 photos at once</p>
+          <input type="file" id="photo-input" class="upload-input-hidden"
+            accept="image/*" multiple aria-label="Select photos to upload"/>
+        </div>
+
+        <div class="upload-preview" id="upload-preview" aria-live="polite"></div>
+
+        <button type="button" class="btn btn--primary upload-submit" id="upload-btn" style="display:none">
+          <span class="btn__text">Share Memories</span>
+          <span class="btn__loading" hidden>Uploading…</span>
+        </button>
+
+        <div id="photo-toast" class="toast" role="alert" aria-live="polite"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer id="footer" class="footer">
+    <div class="footer__kolam-border" aria-hidden="true"></div>
+    <div class="footer__mandala" aria-hidden="true">
+      <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <g transform="translate(50,50)" fill="none" stroke="#D4AF37" stroke-width="0.6" opacity="0.5">
+          <circle r="46"/><circle r="36"/><circle r="26"/>
+          <line y1="-46" y2="-26"/><line y1="-46" y2="-26" transform="rotate(45)"/>
+          <line y1="-46" y2="-26" transform="rotate(90)"/><line y1="-46" y2="-26" transform="rotate(135)"/>
+          <line y1="-46" y2="-26" transform="rotate(180)"/><line y1="-46" y2="-26" transform="rotate(225)"/>
+          <line y1="-46" y2="-26" transform="rotate(270)"/><line y1="-46" y2="-26" transform="rotate(315)"/>
+        </g>
+      </svg>
+    </div>
+    <!-- PLACEHOLDER: Update with actual names and date -->
+    <p class="footer__names">Meenakshi &amp; Arjun</p>
+    <p class="footer__date">January 15, 2026</p>
+    <p class="footer__tagline">With love &amp; blessings</p>
+  </footer>
+
+  <!-- Celebration overlay — shown on successful attending RSVP -->
+  <div id="celebration-overlay" class="celebration-overlay">
+    <div class="celebration-card" role="dialog" aria-modal="true" aria-labelledby="celebration-title">
+
+      <div class="celebration-lotus" aria-hidden="true">
+        <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+          <g transform="translate(40,40)">
+            <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.85"/>
+            <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.85" transform="rotate(45)"/>
+            <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.85" transform="rotate(90)"/>
+            <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.85" transform="rotate(135)"/>
+            <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.85" transform="rotate(180)"/>
+            <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.85" transform="rotate(225)"/>
+            <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.85" transform="rotate(270)"/>
+            <path d="M0,-30 Q12,-18 0,-8 Q-12,-18 0,-30" fill="#C22544" opacity="0.85" transform="rotate(315)"/>
+          </g>
+          <circle cx="40" cy="40" r="9" fill="#D4AF37"/>
+          <circle cx="40" cy="40" r="4" fill="#FFF9C4"/>
+        </svg>
+      </div>
+
+      <p class="celebration-eyebrow">✦ Shubhamastu ✦</p>
+      <h2 class="celebration-title" id="celebration-title">We're Overjoyed!</h2>
+      <p class="celebration-subtitle">Your presence makes our day complete</p>
+
+      <div class="celebration-rule" aria-hidden="true"></div>
+
+      <p class="celebration-message">
+        Meenakshi &amp; Arjun are beyond thrilled you'll be part of their sacred celebration.
+        Your blessings and love mean the world to both families.
+        We are counting down the days — come with love and leave with memories
+        to cherish for a lifetime. See you at the mandap on
+        <strong>January 15, 2026!</strong>
+      </p>
+
+      <p class="celebration-tagline">🌸 With Love &amp; Blessings 🌸</p>
+
+      <button class="btn btn--primary celebration-close" id="celebration-close">
+        Close
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Scripts — load order is critical -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <script src="main.js?v=3"></script>
+
+</body>
+</html>
