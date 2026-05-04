@@ -10,18 +10,18 @@ const CONFIG = {
   gasUrl:   'https://script.google.com/macros/s/AKfycbwwUe4tDp48-ALQGZSyut3h8RDNLC8epG3hpOoMJrUYyoB1lrgCHzMwXeodskuUfOYA/exec', // Apps Script → Deploy → Web App URL (see gas-code.js setup instructions)
   gasToken: 'WEDDING_2026',         // must match SECRET_TOKEN in gas-code.js
   venue: {
-    name:      'Sri Lalitha Mahal Palace',
-    address:   'Nazarbad Mohalla, Mysuru, Karnataka 570010',
-    mapsQuery: 'Sri+Lalitha+Mahal+Palace+Mysuru+Karnataka',
+    name:      'Grandion Event Venue',
+    address:   '1810 Parkwood Blvd, Frisco, TX 75034',
+    mapsQuery: 'https://www.google.com/maps/search/?api=1&query=1810+Parkwood+Blvd,+Frisco,+TX+75034',
   },
   hotel: {
-    name:    'Hotel Roopa',
-    address: 'Bangalore-Nilgiri Road, Mysuru',
+    name:    'Hilton Garden Inn Frisco',
+    address: '7550 Gaylord Pkwy, Frisco, TX 75034',
   },
   wedding: {
-    brideName: 'Meenakshi',
-    groomName: 'Arjun',
-    date:      'January 15, 2026',
+    brideName: 'Megha',
+    groomName: 'Pradeep',
+    date:      'June 27, 2026',
     time:      '9:00 AM',
   },
 };
@@ -436,6 +436,16 @@ function initGSAP() {
     opacity: 0, y: 45, duration: 0.75, ease: 'power2.out', stagger: 0.18,
   });
 
+  /* --- Our Story --- */
+  gsap.from('#our-story .section__header', {
+    scrollTrigger: { trigger: '#our-story', start: 'top 80%', once: true },
+    opacity: 0, y: 28, duration: 0.8,
+  });
+  gsap.from('.story__para, .story__yes, .story__invite, .story__closing, .story__divider', {
+    scrollTrigger: { trigger: '.story__body', start: 'top 82%', once: true },
+    opacity: 0, y: 22, duration: 0.7, ease: 'power1.out', stagger: 0.12,
+  });
+
   /* --- RSVP --- */
   gsap.from('#rsvp .section__header', {
     scrollTrigger: { trigger: '#rsvp', start: 'top 80%', once: true },
@@ -485,9 +495,10 @@ function initMapsButtons() {
    ATTENDANCE TOGGLE
    ============================================================ */
 function initAttendanceToggle() {
-  const toggle  = document.getElementById('attendance-toggle');
-  const hidden  = document.getElementById('rsvp-attending');
-  const field   = document.getElementById('guest-count-field');
+  const toggle     = document.getElementById('attendance-toggle');
+  const hidden     = document.getElementById('rsvp-attending');
+  const field      = document.getElementById('guest-count-field');
+  const namesField = document.getElementById('guest-names-field');
   if (!toggle) return;
 
   toggle.querySelectorAll('.attendance-btn').forEach(btn => {
@@ -495,7 +506,9 @@ function initAttendanceToggle() {
       toggle.querySelectorAll('.attendance-btn').forEach(b => b.classList.remove('is-active'));
       btn.classList.add('is-active');
       hidden.value = btn.dataset.value;
-      if (field) field.style.display = btn.dataset.value === 'yes' ? '' : 'none';
+      const isYes = btn.dataset.value === 'yes';
+      if (field) field.style.display = isYes ? 'flex' : 'none';
+      if (!isYes && namesField) namesField.style.display = 'none';
       document.getElementById('rsvp-attending-error').textContent = '';
     });
   });
@@ -505,26 +518,29 @@ function initAttendanceToggle() {
    GUEST NAME STEPPER
    ============================================================ */
 function initGuestStepper() {
-  const MAX      = 10;
-  let count      = 0;
-  const minus    = document.getElementById('guest-minus');
-  const plus     = document.getElementById('guest-plus');
-  const display  = document.getElementById('guest-count-display');
-  const hidden   = document.getElementById('guest-count');
-  const container = document.getElementById('guest-names-container');
+  const MAX        = 10;
+  let count        = 1; // total attendees including the primary guest
+  const minus      = document.getElementById('guest-minus');
+  const plus       = document.getElementById('guest-plus');
+  const display    = document.getElementById('guest-count-display');
+  const hidden     = document.getElementById('guest-count');
+  const container  = document.getElementById('guest-names-container');
+  const namesField = document.getElementById('guest-names-field');
   if (!minus) return { collectGuestNames: () => 'Not provided' };
 
   function update() {
     display.textContent = count;
     hidden.value        = count;
-    minus.disabled = count <= 0;
+    minus.disabled = count <= 1;
     plus.disabled  = count >= MAX;
+    if (namesField) namesField.style.display = count > 1 ? 'flex' : 'none';
   }
 
   function addField(index) {
     const div = document.createElement('div');
-    div.className = 'form__field guest-name-field';
+    div.className = 'guest-name-field'; // omit form__field to avoid GSAP opacity:0 interference
     div.dataset.index = index;
+    div.style.cssText = 'display:flex; flex-direction:column; gap:6px; opacity:1;';
     div.innerHTML = `
       <label class="form__label" for="guest-name-${index}">
         Guest ${index} Name <span class="form__optional">(optional)</span>
@@ -532,11 +548,10 @@ function initGuestStepper() {
       <input class="form__input" id="guest-name-${index}" name="guest_name_${index}"
         type="text" placeholder="Guest name (optional)" autocomplete="off"/>`;
     container.appendChild(div);
-    // CSS animation on .guest-name-field handles the slide-in; no GSAP needed here
   }
 
-  function removeField() {
-    const last = container.querySelector(`[data-index="${count}"]`);
+  function removeField(index) {
+    const last = container.querySelector(`[data-index="${index}"]`);
     if (!last) return;
     if (typeof gsap !== 'undefined') {
       gsap.to(last, {
@@ -551,14 +566,15 @@ function initGuestStepper() {
   plus.addEventListener('click', () => {
     if (count >= MAX) return;
     count++;
-    update();
-    addField(count);
+    update();            // show namesField first so parent is visible before field is inserted
+    addField(count - 1);
   });
 
   minus.addEventListener('click', () => {
-    if (count <= 0) return;
-    removeField();
+    if (count <= 1) return;
+    const idx = count - 1;
     count--;
+    removeField(idx);
     update();
   });
 
@@ -566,7 +582,7 @@ function initGuestStepper() {
 
   function collectGuestNames() {
     const names = [];
-    for (let i = 1; i <= count; i++) {
+    for (let i = 1; i <= count - 1; i++) {
       const el = document.getElementById(`guest-name-${i}`);
       if (el && el.value.trim()) names.push(el.value.trim());
     }
@@ -575,7 +591,7 @@ function initGuestStepper() {
 
   function resetGuests() {
     container.innerHTML = '';
-    count = 0;
+    count = 1;
     update();
   }
 
@@ -622,17 +638,6 @@ function validateRSVP() {
   } else {
     nameErr.textContent = '';
     name.classList.remove('input--error');
-  }
-
-  const email     = document.getElementById('rsvp-email');
-  const emailErr  = document.getElementById('rsvp-email-error');
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
-    emailErr.textContent = 'Please enter a valid email address.';
-    email.classList.add('input--error');
-    ok = false;
-  } else {
-    emailErr.textContent = '';
-    email.classList.remove('input--error');
   }
 
   const attending    = document.getElementById('rsvp-attending').value;
@@ -747,7 +752,6 @@ function handleRSVPSubmit(e, collectGuestNames, resetGuests) {
     token:      CONFIG.gasToken,
     type:       'rsvp',
     name:       document.getElementById('rsvp-name').value.trim(),
-    email:      document.getElementById('rsvp-email').value.trim(),
     phone:      document.getElementById('rsvp-phone').value.trim() || 'Not provided',
     attending:  isAttending ? 'Yes — Joyfully Accepts' : 'No — Regretfully Declines',
     guestCount: document.getElementById('guest-count').value,
