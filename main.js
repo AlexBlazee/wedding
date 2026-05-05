@@ -7,7 +7,7 @@
    CONFIG — Edit all your details here
    ============================================================ */
 const CONFIG = {
-  gasUrl:   'https://script.google.com/macros/s/AKfycbwZ3vnm6jnRb3X2oDjNHZaQuQ4ojMALCihymMPKohQLJYdExcvMKacu86_urJc2r41d/exec', // Apps Script → Deploy → Web App URL (see gas-code.js setup instructions)
+  gasUrl:   'https://script.google.com/macros/s/AKfycbxxejQ4sXPCJ5UhLsZN6VU58gKX3GfzE_uLHdtI5TO3Oe6D3x1verfV2U8E9tCP4hfN/exec', // Apps Script → Deploy → Web App URL (see gas-code.js setup instructions)
   gasToken: 'WEDDING_2026',         // must match SECRET_TOKEN in gas-code.js
   venue: {
     name:      'Grandion Event Venue',
@@ -659,6 +659,17 @@ function validateRSVP() {
     name.classList.remove('input--error');
   }
 
+  const emailInput = document.getElementById('rsvp-email');
+  const emailErr   = document.getElementById('rsvp-email-error');
+  if (emailInput && emailInput.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value.trim())) {
+    emailErr.textContent = 'Please enter a valid email address.';
+    emailInput.classList.add('input--error');
+    ok = false;
+  } else if (emailErr) {
+    emailErr.textContent = '';
+    emailInput && emailInput.classList.remove('input--error');
+  }
+
   const attending    = document.getElementById('rsvp-attending').value;
   const attendingErr = document.getElementById('rsvp-attending-error');
   if (!attending) {
@@ -767,10 +778,12 @@ function handleRSVPSubmit(e, collectGuestNames, resetGuests) {
   const isAttending = document.getElementById('rsvp-attending').value === 'yes';
   setLoading('rsvp-form', true);
 
+  const emailVal = (document.getElementById('rsvp-email')?.value || '').trim();
   const payload = {
     token:      CONFIG.gasToken,
     type:       'rsvp',
     name:       document.getElementById('rsvp-name').value.trim(),
+    email:      emailVal || '',
     phone:      document.getElementById('rsvp-phone').value.trim() || 'Not provided',
     attending:  isAttending ? 'Yes — Joyfully Accepts' : 'No — Regretfully Declines',
     guestCount: document.getElementById('guest-count').value,

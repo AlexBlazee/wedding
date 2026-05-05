@@ -10,8 +10,8 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel+Decorative:wght@400;700&family=Lato:wght@300;400&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css?v=5"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Cinzel+Decorative:wght@400;700&family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css?v=15"/>
 </head>
 <body>
 
@@ -356,6 +356,15 @@
         </div>
 
         <div class="form__field">
+          <label class="form__label" for="rsvp-email">
+            Email Address <span class="form__optional">(optional — we'll send your confirmation here)</span>
+          </label>
+          <input class="form__input" id="rsvp-email" name="from_email" type="email"
+            autocomplete="email" placeholder="your@email.com"/>
+          <span class="form__error" id="rsvp-email-error" role="alert"></span>
+        </div>
+
+        <div class="form__field">
           <label class="form__label">Will You Attend? <span class="form__required">*</span></label>
           <div class="attendance-toggle" id="attendance-toggle">
             <button type="button" class="attendance-btn attendance-btn--yes" data-value="yes">Joyfully Accept</button>
@@ -438,8 +447,8 @@
          ====================================================== -->
     <section id="accommodation" class="section section--accommodation">
       <div class="section__header">
-        <p class="section__preheader">We Have Arranged</p>
-        <h2 class="section__title">Stay With Us</h2>
+        <!-- <p class="section__preheader">We Have Arranged</p> -->
+        <h2 class="section__title">Nearest Hotel</h2>
         <div class="section__kolam-line" aria-hidden="true"></div>
       </div>
 
@@ -454,8 +463,8 @@
           </p>
           <p class="hotel__description">
             Our carefully chosen partner hotel offers comfortable rooms at
-            specially negotiated rates for wedding guests. Just 15 minutes
-            from the venue with complimentary breakfast included.
+            specially negotiated rates for wedding guests. Just few minutes
+            from the venue.
           </p>
         </div>
 
@@ -641,4 +650,4 @@
   <script src="main.js?v=9"></script>
 
 </body>
-</html>
+</html>             

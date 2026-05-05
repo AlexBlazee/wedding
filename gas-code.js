@@ -30,8 +30,8 @@
 
 const NOTIFICATION_EMAIL = 'meghawedspradeeponjune27@gmail.com';   // notification email
 const SECRET_TOKEN        = 'WEDDING_2026';            // ← keep in sync with CONFIG.gasToken in main.js
-const PHOTO_FOLDER_ID     = 'YOUR_DRIVE_FOLDER_ID';   // ← Google Drive folder ID for guest photos
-const NOTIFY_ON_PHOTOS    = false;                     // ← set true to get an email for every photo upload
+const PHOTO_FOLDER_ID     = '1zHii2aumQzUr1q7VnWYSE7Hyn66j0ras';   // ← Google Drive folder ID for guest photos
+const NOTIFY_ON_PHOTOS    = true;                     // ← set true to get an email for every photo upload
 
 /* ============================================================
    ENTRY POINTS
@@ -51,16 +51,44 @@ function doPost(e) {
       const sheet = getOrCreateSheet(ss, 'RSVPs', [
         'Timestamp (IST)', 'Name', 'Email', 'Phone', 'Attending', 'Additional Guests', 'Guest Names',
       ]);
-      sheet.appendRow([
+
+      const newRow = [
         timestamp(),
         data.name,
-        data.email,
+        data.email || '',
         data.phone || 'Not provided',
         data.attending,
         data.guestCount,
         data.guestNames || 'None',
-      ]);
-      MailApp.sendEmail({ to: NOTIFICATION_EMAIL, subject: `New RSVP: ${data.name} — ${data.attending}`, htmlBody: rsvpEmailHtml(data) });
+      ];
+
+      // If email provided, update existing row instead of appending
+      let isUpdate = false;
+      if (data.email) {
+        const values = sheet.getDataRange().getValues();
+        for (let i = 1; i < values.length; i++) {
+          if (String(values[i][2]).toLowerCase() === data.email.toLowerCase()) {
+            sheet.getRange(i + 1, 1, 1, newRow.length).setValues([newRow]);
+            isUpdate = true;
+            break;
+          }
+        }
+      }
+      if (!isUpdate) sheet.appendRow(newRow);
+
+      MailApp.sendEmail({
+        to: NOTIFICATION_EMAIL,
+        subject: `${isUpdate ? 'Updated' : 'New'} RSVP: ${data.name} — ${data.attending}`,
+        htmlBody: rsvpEmailHtml(data, isUpdate),
+      });
+
+      if (data.email) {
+        MailApp.sendEmail({
+          to: data.email,
+          subject: isUpdate ? `RSVP Updated — Megha & Pradeep's Wedding` : `Your RSVP — Megha & Pradeep's Wedding`,
+          htmlBody: guestConfirmationEmailHtml(data, isUpdate),
+        });
+      }
 
     } else if (data.type === 'room') {
       const sheet = getOrCreateSheet(ss, 'Room Requests', [
@@ -142,14 +170,14 @@ function jsonResponse(obj) {
    EMAIL TEMPLATES
    ============================================================ */
 
-function rsvpEmailHtml(d) {
+function rsvpEmailHtml(d, isUpdate) {
   const isYes  = d.attending.toLowerCase().includes('yes');
   const color  = isYes ? '#287F54' : '#C22544';
   return `
     <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;border:1px solid #e0d0b0;border-radius:4px;overflow:hidden;">
       <div style="background:#1A0A10;padding:24px;text-align:center;">
         <h1 style="color:#D4AF37;font-size:22px;margin:0;">Megha &amp; Pradeep</h1>
-        <p style="color:#FFF9C4;font-size:13px;margin:6px 0 0;">New RSVP Received</p>
+        <p style="color:#FFF9C4;font-size:13px;margin:6px 0 0;">${isUpdate ? 'RSVP Updated' : 'New RSVP Received'}</p>
       </div>
       <div style="padding:24px;">
         <table style="border-collapse:collapse;width:100%;font-size:14px;">
@@ -184,6 +212,39 @@ function photoEmailHtml(d, driveUrl) {
       </div>
       <div style="padding:12px 24px;background:#fdf6ec;text-align:center;">
         <p style="color:#888;font-size:12px;margin:0;">Received: ${timestamp()}</p>
+      </div>
+    </div>`;
+}
+
+function guestConfirmationEmailHtml(d, isUpdate) {
+  const isYes  = d.attending && d.attending.toLowerCase().includes('yes');
+  const color  = isYes ? '#287F54' : '#C22544';
+  const message = isUpdate
+    ? (isYes
+        ? `Your RSVP has been successfully updated — we're so glad you're still joining us!`
+        : `Your RSVP has been updated. We're sorry you won't be able to make it — our warmest blessings are with you!`)
+    : (isYes
+        ? `We are absolutely thrilled that you'll be joining us! Your presence will make our celebration even more special.`
+        : `We understand you won't be able to make it, and we'll truly miss having you on our special day.`);
+  return `
+    <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;border:1px solid #e0d0b0;border-radius:4px;overflow:hidden;">
+      <div style="background:#1A0A10;padding:28px 24px;text-align:center;">
+        <h1 style="color:#D4AF37;font-size:24px;margin:0;letter-spacing:1px;">Megha &amp; Pradeep</h1>
+        <p style="color:#FFF9C4;font-size:13px;margin:8px 0 0;">June 27, 2026 &nbsp;·&nbsp; Frisco, TX</p>
+      </div>
+      <div style="padding:24px;">
+        <p style="font-size:16px;font-weight:bold;color:#1A0A10;margin:0 0 6px;">Dear ${d.name},</p>
+        <p style="font-size:14px;color:#444;line-height:1.6;margin:0 0 20px;">${message}</p>
+        <table style="border-collapse:collapse;width:100%;font-size:14px;">
+          <tr><td style="padding:9px 12px;font-weight:bold;width:160px;border-bottom:1px solid #f0e0cc;">Attending</td><td style="padding:9px 12px;font-weight:bold;color:${color};border-bottom:1px solid #f0e0cc;">${d.attending}</td></tr>
+          ${isYes ? `<tr style="background:#fdf6ec;"><td style="padding:9px 12px;font-weight:bold;border-bottom:1px solid #f0e0cc;">Guests</td><td style="padding:9px 12px;border-bottom:1px solid #f0e0cc;">${d.guestCount} person(s)</td></tr>` : ''}
+          ${isYes && d.guestNames && d.guestNames !== 'None' ? `<tr><td style="padding:9px 12px;font-weight:bold;border-bottom:1px solid #f0e0cc;">Guest Names</td><td style="padding:9px 12px;border-bottom:1px solid #f0e0cc;">${d.guestNames}</td></tr>` : ''}
+        </table>
+        ${isYes ? `<div style="margin-top:20px;padding:14px 16px;background:#fdf6ec;border-left:4px solid #D4AF37;border-radius:2px;font-size:13px;color:#555;line-height:1.5;"><strong>Venue:</strong> Grandion Event Venue<br/>1810 Parkwood Blvd, Frisco, TX 75034<br/><strong>Date:</strong> June 27, 2026 &nbsp;·&nbsp; <strong>Time:</strong> 9:00 AM</div>` : ''}
+      </div>
+      <div style="padding:16px 24px;background:#1A0A10;text-align:center;">
+        <p style="color:#D4AF37;font-size:13px;margin:0;">With love &amp; blessings,</p>
+        <p style="color:#FFF9C4;font-size:14px;font-weight:bold;margin:4px 0 0;">Megha &amp; Pradeep's Families</p>
       </div>
     </div>`;
 }
