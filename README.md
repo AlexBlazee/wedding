@@ -1,4 +1,4 @@
-# Meenakshi & Arjun — Wedding Website
+
 
 A static, single-page South Indian Hindu wedding website. No build step, no framework — just HTML, CSS, and JavaScript.
 
