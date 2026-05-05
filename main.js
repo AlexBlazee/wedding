@@ -7,7 +7,7 @@
    CONFIG — Edit all your details here
    ============================================================ */
 const CONFIG = {
-  gasUrl:   'https://script.google.com/macros/s/AKfycbwwUe4tDp48-ALQGZSyut3h8RDNLC8epG3hpOoMJrUYyoB1lrgCHzMwXeodskuUfOYA/exec', // Apps Script → Deploy → Web App URL (see gas-code.js setup instructions)
+  gasUrl:   'https://script.google.com/macros/s/AKfycbwZ3vnm6jnRb3X2oDjNHZaQuQ4ojMALCihymMPKohQLJYdExcvMKacu86_urJc2r41d/exec', // Apps Script → Deploy → Web App URL (see gas-code.js setup instructions)
   gasToken: 'WEDDING_2026',         // must match SECRET_TOKEN in gas-code.js
   venue: {
     name:      'Grandion Event Venue',
@@ -48,7 +48,7 @@ function initThreeJS() {
   });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setClearColor(0x14060B, 1); // deeper plum-ink
+  renderer.setClearColor(0x14060B, 1);
 
   /* --- Scene & Camera --- */
   const scene  = new THREE.Scene();
@@ -252,14 +252,23 @@ function initThreeJS() {
 
   const jasmineTexture  = createPetalTexture('rgba(255,249,196,0.95)', 'rgba(255,255,255,0.7)');
   const marigoldTexture = createPetalTexture('rgba(255,193,7,0.95)',   'rgba(255,152,0,0.6)');
+  const blossomTexture  = createPetalTexture('rgba(255,160,120,0.92)', 'rgba(210,80,70,0.55)');
   const dustTexture     = createDustTexture();
 
-  const jasmineCount  = Math.floor(PARTICLE_COUNT * 0.55);
-  const marigoldCount = PARTICLE_COUNT - jasmineCount;
+  const jasmineCount  = Math.floor(PARTICLE_COUNT * 0.45);
+  const marigoldCount = Math.floor(PARTICLE_COUNT * 0.35);
+  const blossomCount  = isMobile ? 55 : 110;
 
   const jasmine  = buildParticles(jasmineCount,  jasmineTexture,  0.13, 4, 14, 8);
   const marigold = buildParticles(marigoldCount, marigoldTexture, 0.18, 3, 14, 8);
+  const blossom  = buildParticles(blossomCount,  blossomTexture,  0.26, 4, 16, 9);
   const dust     = buildParticles(DUST_COUNT,    dustTexture,     0.06, 5, 12, 7);
+
+  // Blossoms fall slowly and sway widely — like petals on a breeze
+  for (let i = 0; i < blossom.velocities.length; i++) {
+    blossom.velocities[i]  = -(0.002 + Math.random() * 0.005);
+    blossom.swayOffsets[i] = Math.random() * Math.PI * 2;
+  }
 
   // Slower drift for dust — feels like temple-lamp embers
   for (let i = 0; i < dust.velocities.length; i++) {
@@ -268,6 +277,7 @@ function initThreeJS() {
 
   scene.add(jasmine.points);
   scene.add(marigold.points);
+  scene.add(blossom.points);
   scene.add(dust.points);
 
   /* --- Mouse-driven camera parallax --- */
@@ -351,6 +361,19 @@ function initThreeJS() {
     animateParticles(jasmine);
     animateParticles(marigold);
     animateParticles(dust);
+    // Blossoms sway wider and drift more lazily
+    const pos = blossom.geo.attributes.position.array;
+    for (let i = 0; i < blossom.velocities.length; i++) {
+      const idx = i * 3;
+      pos[idx + 1] += blossom.velocities[i];
+      pos[idx]     += Math.sin(time * 0.6 + blossom.swayOffsets[i]) * 0.007
+                    + Math.sin(time * 0.25 + blossom.swayOffsets[i] * 0.7) * 0.004;
+      if (pos[idx + 1] < -blossom.SPREAD_Y / 2) {
+        pos[idx + 1] = blossom.SPREAD_Y / 2;
+        pos[idx]     = (Math.random() - 0.5) * blossom.SPREAD_X;
+      }
+    }
+    blossom.geo.attributes.position.needsUpdate = true;
     renderer.render(scene, camera);
   }
 
@@ -388,10 +411,6 @@ function initGSAP() {
       { opacity: 0, y: 38 }, { opacity: 1, y: 0, duration: 1.0, ease: 'power3.out' }, '-=0.55')
     .fromTo('.hero__divider',
       { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1, duration: 0.9, ease: 'power2.inOut', transformOrigin: 'center' }, '-=0.35')
-    .fromTo('.hero__date',
-      { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.4')
-    .fromTo('.hero__time',
-      { opacity: 0 }, { opacity: 1, duration: 0.5 }, '-=0.3')
     .fromTo('.hero__scroll-indicator',
       { opacity: 0 }, { opacity: 1, duration: 0.5 }, '-=0.2');
 
@@ -1016,6 +1035,50 @@ function init3DTilt() {
     });
   });
 }
+
+/* ============================================================
+   BACKGROUND MUSIC — iframe created on first click
+   ============================================================ */
+(function initMusic() {
+  let playing = false;
+
+  function setupBtn() {
+    const btn = document.getElementById('music-btn');
+    if (!btn) return;
+
+    btn.addEventListener('click', () => {
+      let frame = document.getElementById('yt-iframe');
+
+      if (!frame) {
+        // Create iframe inside the user-gesture handler so autoplay is allowed
+        frame = document.createElement('iframe');
+        frame.id     = 'yt-iframe';
+        frame.width  = '320';
+        frame.height = '180';
+        frame.allow  = 'autoplay; encrypted-media';
+        frame.src    = 'https://www.youtube.com/embed/ULmg0qwN9X8?autoplay=1&controls=0&loop=1&playlist=ULmg0qwN9X8&rel=0&enablejsapi=1';
+        const mount  = document.getElementById('yt-player-mount');
+        (mount || document.body).appendChild(frame);
+        playing = true;
+      } else {
+        playing = !playing;
+        frame.contentWindow.postMessage(
+          JSON.stringify({ event: 'command', func: playing ? 'playVideo' : 'pauseVideo', args: [] }),
+          '*'
+        );
+      }
+
+      btn.classList.toggle('is-playing', playing);
+      btn.setAttribute('aria-label', playing ? 'Pause music' : 'Play music');
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupBtn);
+  } else {
+    setupBtn();
+  }
+}());
 
 /* ============================================================
    BOOT — DOMContentLoaded

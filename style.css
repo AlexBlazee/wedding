@@ -111,7 +111,8 @@ ul   { list-style: none; }
   font-size: 0.7rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(255, 249, 196, 0.8);
+  color: #ffffff;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.7);
   transition: color var(--transition-fast);
 }
 .nav-links a:hover { color: var(--color-gold); }
@@ -181,23 +182,9 @@ ul   { list-style: none; }
 }
 .hero__gopuram svg { width: 100%; height: 100%; }
 
-/* Kolam mandala */
+/* Kolam mandala — hidden */
 .hero__mandala {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: min(440px, 88vw);
-  height: min(440px, 88vw);
-  color: var(--color-gold);
-  opacity: 0.14;
-  z-index: var(--z-deco);
-  animation: mandala-rotate 60s linear infinite;
-}
-.hero__mandala svg { width: 100%; height: 100%; }
-
-@keyframes mandala-rotate {
-  from { transform: translate(-50%, -50%) rotate(0deg); }
-  to   { transform: translate(-50%, -50%) rotate(360deg); }
+  display: none;
 }
 
 /* Hero text */
@@ -212,7 +199,8 @@ ul   { list-style: none; }
 .hero__pretext {
   font-family: var(--font-serif);
   font-size: clamp(0.72rem, 2.8vw, 0.95rem);
-  color: rgba(212, 175, 55, 0.8);
+  color: #ffffff;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.65), 0 0 3px rgba(0, 0, 0, 0.5);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   margin-bottom: 1.5rem;
@@ -245,9 +233,7 @@ ul   { list-style: none; }
   opacity: 0; /* GSAP animates in */
 }
 .divider-svg { width: 100%; height: 100%; overflow: visible; }
-.divider-path {
-  /* stroke-dasharray/offset set by JS for draw-on animation */
-}
+/* .divider-path — stroke-dasharray/offset set by JS for draw-on animation */
 .hero__date {
   font-family: var(--font-display);
   font-size: clamp(0.78rem, 3vw, 1.05rem);
@@ -259,7 +245,8 @@ ul   { list-style: none; }
 .hero__time {
   font-family: var(--font-serif);
   font-size: clamp(0.82rem, 2.8vw, 1rem);
-  color: rgba(255, 248, 240, 0.65);
+  color: #ffffff;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.65), 0 0 3px rgba(0, 0, 0, 0.5);
   font-style: italic;
   margin-top: 0.3rem;
   opacity: 0;
@@ -1268,7 +1255,7 @@ ul   { list-style: none; }
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
-  #hero-canvas { display: none; }
+  #hero-canvas { display: none !important; }
   .hero__pretext,
   .hero__bride-name,
   .hero__groom-name,
@@ -1360,6 +1347,7 @@ body {
   -webkit-text-fill-color: transparent;
   text-shadow: 0 8px 30px rgba(200, 148, 60, .18);
   font-style: italic;
+  padding-bottom: 0.15em;
 }
 .hero__ampersand {
   background: radial-gradient(circle, #E8A060 0%, #C8943C 60%, #A87830 100%);
@@ -1431,7 +1419,8 @@ body {
   font-size: clamp(.55rem, 1.6vw, .7rem);
   letter-spacing: .35em;
   text-transform: uppercase;
-  color: rgba(232, 199, 110, .78);
+  color: #ffffff;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.65), 0 0 3px rgba(0, 0, 0, 0.5);
   margin: -.4rem 0 1.6rem;
   opacity: 0;
   animation: ganesh-reveal 1.6s cubic-bezier(.2,.7,.3,1.1) 1.1s forwards;
@@ -1612,11 +1601,7 @@ body {
   color: #7A2848;
 }
 
-/* ====== HERO MANDALA — golden glow ====== */
-.hero__mandala {
-  filter: drop-shadow(0 0 18px rgba(212, 175, 55, .25));
-  opacity: .22;
-}
+/* ====== HERO MANDALA — hidden ====== */
 .hero__gopuram {
   color: var(--tm-saffron);
   opacity: .14;
@@ -1646,4 +1631,53 @@ body {
   .ganesh-medallion__halo  { animation: none !important; }
   .tilt-3d, .couple__frame, .details__card, .hotel__card,
   .memories__card, .map-frame { transform: none !important; }
+}
+
+/* ============================================================
+   MUSIC BUTTON
+   ============================================================ */
+#yt-player-mount,
+#yt-player-mount #yt-iframe,
+#yt-iframe {
+  position: fixed;
+  left: -9999px;
+  top: -9999px;
+  width: 320px;
+  height: 180px;
+  pointer-events: none;
+}
+
+.music-btn {
+  position: fixed;
+  bottom: 1.75rem;
+  right: 1.75rem;
+  z-index: 9000;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(20, 6, 11, 0.82);
+  border: 1.5px solid rgba(212, 175, 55, 0.55);
+  color: var(--color-gold);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
+}
+.music-btn:hover {
+  border-color: var(--color-gold);
+  transform: scale(1.1);
+  background: rgba(20, 6, 11, 0.95);
+}
+.music-btn.is-playing {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.18), 0 2px 16px rgba(0, 0, 0, 0.45);
+}
+.music-btn__icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
 }
