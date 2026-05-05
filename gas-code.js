@@ -28,7 +28,7 @@
  *  Deploy → Manage deployments → pencil (Edit) icon → Version: New version → Deploy
  */
 
-const NOTIFICATION_EMAIL = 'pradeepy121@gmail.com';   // notification email
+const NOTIFICATION_EMAIL = 'meghawedspradeeponjune27@gmail.com';   // notification email
 const SECRET_TOKEN        = 'WEDDING_2026';            // ← keep in sync with CONFIG.gasToken in main.js
 const PHOTO_FOLDER_ID     = 'YOUR_DRIVE_FOLDER_ID';   // ← Google Drive folder ID for guest photos
 const NOTIFY_ON_PHOTOS    = false;                     // ← set true to get an email for every photo upload
@@ -148,7 +148,7 @@ function rsvpEmailHtml(d) {
   return `
     <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;border:1px solid #e0d0b0;border-radius:4px;overflow:hidden;">
       <div style="background:#1A0A10;padding:24px;text-align:center;">
-        <h1 style="color:#D4AF37;font-size:22px;margin:0;">Meenakshi &amp; Arjun</h1>
+        <h1 style="color:#D4AF37;font-size:22px;margin:0;">Megha &amp; Pradeep</h1>
         <p style="color:#FFF9C4;font-size:13px;margin:6px 0 0;">New RSVP Received</p>
       </div>
       <div style="padding:24px;">
@@ -171,7 +171,7 @@ function photoEmailHtml(d, driveUrl) {
   return `
     <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;border:1px solid #e0d0b0;border-radius:4px;overflow:hidden;">
       <div style="background:#1A0A10;padding:24px;text-align:center;">
-        <h1 style="color:#D4AF37;font-size:22px;margin:0;">Meenakshi &amp; Arjun</h1>
+        <h1 style="color:#D4AF37;font-size:22px;margin:0;">Megha &amp; Pradeep</h1>
         <p style="color:#FFF9C4;font-size:13px;margin:6px 0 0;">New Photo Upload</p>
       </div>
       <div style="padding:24px;">
@@ -192,7 +192,7 @@ function roomEmailHtml(d) {
   return `
     <div style="font-family:Arial,sans-serif;max-width:520px;margin:0 auto;border:1px solid #e0d0b0;border-radius:4px;overflow:hidden;">
       <div style="background:#1A0A10;padding:24px;text-align:center;">
-        <h1 style="color:#D4AF37;font-size:22px;margin:0;">Meenakshi &amp; Arjun</h1>
+        <h1 style="color:#D4AF37;font-size:22px;margin:0;">Megha &amp; Pradeep</h1>
         <p style="color:#FFF9C4;font-size:13px;margin:6px 0 0;">Room Block Request</p>
       </div>
       <div style="padding:24px;">
