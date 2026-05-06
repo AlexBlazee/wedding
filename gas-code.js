@@ -90,6 +90,7 @@ function doPost(e) {
         });
       }
 
+    /* room request — commented out
     } else if (data.type === 'room') {
       const sheet = getOrCreateSheet(ss, 'Room Requests', [
         'Timestamp (IST)', 'Name', 'Phone', 'Rooms Requested', 'Hotel',
@@ -102,6 +103,7 @@ function doPost(e) {
         data.hotel,
       ]);
       MailApp.sendEmail({ to: NOTIFICATION_EMAIL, subject: `Room Request: ${data.name} — ${data.rooms} room(s)`, htmlBody: roomEmailHtml(data) });
+    */
 
     } else if (data.type === 'photo') {
       const folder = DriveApp.getFolderById(PHOTO_FOLDER_ID);
@@ -222,7 +224,7 @@ function guestConfirmationEmailHtml(d, isUpdate) {
   const message = isUpdate
     ? (isYes
         ? `Your RSVP has been successfully updated — we're so glad you're still joining us!`
-        : `Your RSVP has been updated. We're sorry you won't be able to make it — our warmest blessings are with you!`)
+        : `Your RSVP has been updated. We're sorry you won't be able to make it.`)
     : (isYes
         ? `We are absolutely thrilled that you'll be joining us! Your presence will make our celebration even more special.`
         : `We understand you won't be able to make it, and we'll truly miss having you on our special day.`);
@@ -243,7 +245,7 @@ function guestConfirmationEmailHtml(d, isUpdate) {
         ${isYes ? `<div style="margin-top:20px;padding:14px 16px;background:#fdf6ec;border-left:4px solid #D4AF37;border-radius:2px;font-size:13px;color:#555;line-height:1.5;"><strong>Venue:</strong> Grandion Event Venue<br/>1810 Parkwood Blvd, Frisco, TX 75034<br/><strong>Date:</strong> June 27, 2026 &nbsp;·&nbsp; <strong>Time:</strong> 9:00 AM</div>` : ''}
       </div>
       <div style="padding:16px 24px;background:#1A0A10;text-align:center;">
-        <p style="color:#D4AF37;font-size:13px;margin:0;">With love &amp; blessings,</p>
+        <p style="color:#D4AF37;font-size:13px;margin:0;">With love,</p>
         <p style="color:#FFF9C4;font-size:14px;font-weight:bold;margin:4px 0 0;">Megha &amp; Pradeep's Families</p>
       </div>
     </div>`;

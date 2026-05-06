@@ -7,7 +7,7 @@
    CONFIG — Edit all your details here
    ============================================================ */
 const CONFIG = {
-  gasUrl:   'https://script.google.com/macros/s/AKfycbxxejQ4sXPCJ5UhLsZN6VU58gKX3GfzE_uLHdtI5TO3Oe6D3x1verfV2U8E9tCP4hfN/exec', // Apps Script → Deploy → Web App URL (see gas-code.js setup instructions)
+  gasUrl:   'https://script.google.com/macros/s/AKfycbx9p-rjDUZGImRUs3ir6TZEZqafi-WYQkGHtvtcAkVYCU5LeOZimmMR823zndy59u9l/exec', // Apps Script → Deploy → Web App URL (see gas-code.js setup instructions)
   gasToken: 'WEDDING_2026',         // must match SECRET_TOKEN in gas-code.js
   venue: {
     name:      'Grandion Event Venue',
@@ -618,8 +618,9 @@ function initGuestStepper() {
 }
 
 /* ============================================================
-   ROOM STEPPER (Accommodation)
+   ROOM STEPPER (Accommodation) — commented out
    ============================================================ */
+/*
 function initRoomStepper() {
   const MIN   = 1;
   const MAX   = 20;
@@ -641,6 +642,7 @@ function initRoomStepper() {
   minus.addEventListener('click', () => { if (rooms > MIN) { rooms--; update(); } });
   update();
 }
+*/
 
 /* ============================================================
    FORM VALIDATION
@@ -687,6 +689,7 @@ function validateRSVP() {
   return ok;
 }
 
+/*
 function validateCoupon() {
   let ok = true;
   const name     = document.getElementById('coupon-name');
@@ -714,6 +717,7 @@ function validateCoupon() {
 
   return ok;
 }
+*/
 
 /* ============================================================
    TOAST HELPER
@@ -805,7 +809,7 @@ function handleRSVPSubmit(e, collectGuestNames, resetGuests) {
       if (isAttending) {
         showCelebration();
       } else {
-        showToast('rsvp-toast', 'Thank you for letting us know. We\'ll miss you and send our warmest blessings! 🌸', 'success');
+        showToast('rsvp-toast', 'We\'ll miss celebrating with you, but we truly appreciate you taking time to respond!', 'success');
       }
     })
     .catch(() => {
@@ -815,8 +819,9 @@ function handleRSVPSubmit(e, collectGuestNames, resetGuests) {
 }
 
 /* ============================================================
-   GOOGLE APPS SCRIPT — ROOM REQUEST SUBMIT
+   GOOGLE APPS SCRIPT — ROOM REQUEST SUBMIT (commented out)
    ============================================================ */
+/*
 function handleCouponSubmit(e) {
   e.preventDefault();
   if (!validateCoupon()) return;
@@ -846,6 +851,7 @@ function handleCouponSubmit(e) {
       showToast('coupon-toast', 'Connection error — please check your internet and try again.', 'error');
     });
 }
+*/
 
 /* ============================================================
    IMAGE COMPRESSION (Canvas-based, targets ≤ 1.5 MB JPEG)
@@ -1050,39 +1056,74 @@ function init3DTilt() {
 }
 
 /* ============================================================
-   BACKGROUND MUSIC — iframe created on first click
+   BACKGROUND MUSIC — YT.Player API (desktop + mobile safe)
    ============================================================ */
 (function initMusic() {
-  let playing = false;
+  let player   = null;
+  let playing  = false;
+  let apiReady = !!(window.YT && window.YT.Player);
+  let wantPlay = false;
+
+  // Called by YouTube IFrame API script when it finishes loading
+  const _prev = window.onYouTubeIframeAPIReady;
+  window.onYouTubeIframeAPIReady = function () {
+    if (_prev) _prev();
+    apiReady = true;
+    if (wantPlay) { wantPlay = false; buildPlayer(); }
+  };
+
+  function buildPlayer() {
+    const mount = document.getElementById('yt-player-mount');
+    if (!mount) return;
+    const el = document.createElement('div');
+    mount.appendChild(el);
+
+    player = new YT.Player(el, {
+      videoId: 'ULmg0qwN9X8',
+      width: '1', height: '1',
+      playerVars: {
+        autoplay:    1,
+        controls:    0,
+        loop:        1,
+        playlist:    'ULmg0qwN9X8',
+        playsinline: 1,
+        rel:         0,
+      },
+      events: {
+        onReady(ev)       { ev.target.playVideo(); },
+        onStateChange(ev) {
+          playing = (ev.data === 1 || ev.data === 3); // PLAYING or BUFFERING
+          sync();
+        },
+      },
+    });
+  }
+
+  function sync() {
+    const btn = document.getElementById('music-btn');
+    if (!btn) return;
+    btn.classList.toggle('is-playing', playing);
+    btn.setAttribute('aria-label', playing ? 'Pause music' : 'Play music');
+  }
 
   function setupBtn() {
     const btn = document.getElementById('music-btn');
     if (!btn) return;
 
     btn.addEventListener('click', () => {
-      let frame = document.getElementById('yt-iframe');
-
-      if (!frame) {
-        // Create iframe inside the user-gesture handler so autoplay is allowed
-        frame = document.createElement('iframe');
-        frame.id     = 'yt-iframe';
-        frame.width  = '320';
-        frame.height = '180';
-        frame.allow  = 'autoplay; encrypted-media';
-        frame.src    = 'https://www.youtube.com/embed/ULmg0qwN9X8?autoplay=1&controls=0&loop=1&playlist=ULmg0qwN9X8&rel=0&enablejsapi=1';
-        const mount  = document.getElementById('yt-player-mount');
-        (mount || document.body).appendChild(frame);
+      if (!player) {
+        // First click — must stay inside the user-gesture call stack for iOS autoplay
         playing = true;
-      } else {
-        playing = !playing;
-        frame.contentWindow.postMessage(
-          JSON.stringify({ event: 'command', func: playing ? 'playVideo' : 'pauseVideo', args: [] }),
-          '*'
-        );
+        sync();
+        if (apiReady) {
+          buildPlayer();
+        } else {
+          wantPlay = true; // buildPlayer() fires when API finishes loading
+        }
+        return;
       }
-
-      btn.classList.toggle('is-playing', playing);
-      btn.setAttribute('aria-label', playing ? 'Pause music' : 'Play music');
+      if (playing) { player.pauseVideo(); }
+      else         { player.playVideo();  }
     });
   }
 
@@ -1091,6 +1132,35 @@ function init3DTilt() {
   } else {
     setupBtn();
   }
+}());
+
+/* ============================================================
+   COUNTDOWN TIMER
+   ============================================================ */
+(function initCountdown() {
+  const target = new Date('2026-06-27T09:00:00');
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function tick() {
+    const diff = target - Date.now();
+    if (diff <= 0) {
+      document.getElementById('footer-countdown').innerHTML =
+        '<p class="countdown__num" style="font-size:1.4rem">Today is the day! 🌸</p>';
+      return;
+    }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cd-days').textContent  = pad(d);
+    document.getElementById('cd-hours').textContent = pad(h);
+    document.getElementById('cd-mins').textContent  = pad(m);
+    document.getElementById('cd-secs').textContent  = pad(s);
+  }
+
+  tick();
+  setInterval(tick, 1000);
 }());
 
 /* ============================================================
@@ -1110,7 +1180,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 5. Interactive form components
   initAttendanceToggle();
   const { collectGuestNames, resetGuests } = initGuestStepper();
-  initRoomStepper();
+  // initRoomStepper();  // commented out with room request feature
 
   // 6. Form submit handlers
   const rsvpForm = document.getElementById('rsvp-form');
@@ -1118,10 +1188,8 @@ document.addEventListener('DOMContentLoaded', () => {
     rsvpForm.addEventListener('submit', e => handleRSVPSubmit(e, collectGuestNames, resetGuests));
   }
 
-  const couponForm = document.getElementById('coupon-form');
-  if (couponForm) {
-    couponForm.addEventListener('submit', handleCouponSubmit);
-  }
+  // const couponForm = document.getElementById('coupon-form');  // commented out with room request feature
+  // if (couponForm) { couponForm.addEventListener('submit', handleCouponSubmit); }
 
   // 7. Photo upload (Share Your Memories)
   initPhotoUpload();
