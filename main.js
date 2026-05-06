@@ -1059,40 +1059,33 @@ function init3DTilt() {
    BACKGROUND MUSIC — YT.Player API (desktop + mobile safe)
    ============================================================ */
 (function initMusic() {
-  let player   = null;
-  let playing  = false;
-  let apiReady = !!(window.YT && window.YT.Player);
-  let wantPlay = false;
+  let player      = null;
+  let playerReady = false;
+  let playing     = false;
+  let wantPlay    = false;
 
-  // Called by YouTube IFrame API script when it finishes loading
   const _prev = window.onYouTubeIframeAPIReady;
   window.onYouTubeIframeAPIReady = function () {
     if (_prev) _prev();
-    apiReady = true;
-    if (wantPlay) { wantPlay = false; buildPlayer(); }
+    buildPlayer();
   };
 
   function buildPlayer() {
     const mount = document.getElementById('yt-player-mount');
-    if (!mount) return;
+    if (!mount || player) return;
     const el = document.createElement('div');
     mount.appendChild(el);
-
     player = new YT.Player(el, {
       videoId: 'ULmg0qwN9X8',
       width: '1', height: '1',
-      playerVars: {
-        autoplay:    1,
-        controls:    0,
-        loop:        1,
-        playlist:    'ULmg0qwN9X8',
-        playsinline: 1,
-        rel:         0,
-      },
+      playerVars: { autoplay: 0, controls: 0, loop: 1, playlist: 'ULmg0qwN9X8', playsinline: 1, rel: 0 },
       events: {
-        onReady(ev)       { ev.target.playVideo(); },
+        onReady(ev) {
+          playerReady = true;
+          if (wantPlay) { wantPlay = false; ev.target.playVideo(); }
+        },
         onStateChange(ev) {
-          playing = (ev.data === 1 || ev.data === 3); // PLAYING or BUFFERING
+          playing = (ev.data === 1 || ev.data === 3);
           sync();
         },
       },
@@ -1109,23 +1102,19 @@ function init3DTilt() {
   function setupBtn() {
     const btn = document.getElementById('music-btn');
     if (!btn) return;
-
     btn.addEventListener('click', () => {
-      if (!player) {
-        // First click — must stay inside the user-gesture call stack for iOS autoplay
-        playing = true;
-        sync();
-        if (apiReady) {
-          buildPlayer();
-        } else {
-          wantPlay = true; // buildPlayer() fires when API finishes loading
-        }
+      if (!playerReady) {
+        // Player still loading — mark intent; onReady will start it
+        wantPlay = true;
         return;
       }
       if (playing) { player.pauseVideo(); }
       else         { player.playVideo();  }
     });
   }
+
+  // Build player immediately if API already loaded, otherwise wait for callback
+  if (window.YT && window.YT.Player) buildPlayer();
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', setupBtn);
