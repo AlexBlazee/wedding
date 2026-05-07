@@ -211,7 +211,7 @@ ul   { list-style: none; }
 .hero__pretext {
   font-family: var(--font-serif);
   font-size: clamp(0.82rem, 2.4vw, 1rem);
-  font-weight: 600;
+  font-weight: 550;
   color: #4A0A14;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -222,6 +222,7 @@ ul   { list-style: none; }
   background: radial-gradient(ellipse 90% 120% at 50% 50%, rgba(255,243,215,0.6) 0%, rgba(255,240,205,0.3) 55%, transparent 100%);
   border-radius: 0;
   padding: 0.3em 1em;
+  -webkit-text-stroke: 0.3px #4A0A14;
   text-shadow: 0 0 6px rgba(255,245,215,0.9), 0 0 16px rgba(255,240,200,0.7);
 }
 .hero__bride-name,
@@ -511,13 +512,13 @@ ul   { list-style: none; }
 }
 .details__date {
   font-family: var(--font-serif);
-  font-size: 1.15rem;
+  font-size: 1.35rem;
   font-weight: 600;
   color: var(--color-text);
 }
 .details__time {
   font-family: var(--font-serif);
-  font-size: 1rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: var(--color-text);
   margin-top: 0.2rem;
@@ -876,18 +877,29 @@ ul   { list-style: none; }
   margin-bottom: var(--space-xs);
 }
 .venue__address {
-  font-family: var(--font-serif);
-  font-size: 1.2rem;
-  color: var(--color-text-light);
-  font-style: italic;
-  margin-bottom: var(--space-md);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text);
+  letter-spacing: 0.03em;
+  margin-bottom: 0.5rem;
 }
 .venue__description {
   font-family: var(--font-serif);
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--color-text);
   line-height: 1.8;
-  margin-bottom: var(--space-lg);
+  margin-bottom: 0.5rem;
+}
+.venue__event-time {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  /* color: #8B1A2E; */
+  color: var(--color-text);
+  letter-spacing: 0.04em;
+  margin-top: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 .venue__actions {
   display: flex;
@@ -1278,6 +1290,27 @@ ul   { list-style: none; }
   text-transform: uppercase;
   margin-top: 0.6rem;
   font-style: italic;
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE (max 767px)
+   ============================================================ */
+@media (max-width: 767px) {
+  #top-nav {
+    padding: 0.65rem 1rem;
+  }
+  .nav-monogram {
+    font-size: 0.95rem;
+    white-space: nowrap;
+    letter-spacing: 0.1em;
+  }
+  .nav-links {
+    gap: 0.6rem;
+  }
+  .nav-links a {
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+  }
 }
 
 /* ============================================================
