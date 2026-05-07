@@ -1797,3 +1797,28 @@ body {
   height: 20px;
   flex-shrink: 0;
 }
+#music-badge {
+  animation: badgeFadeIn 0.4s ease;
+}
+.music-badge__dots span {
+  animation: dotBounce 1.2s infinite;
+  display: inline-block;
+}
+.music-badge__dots span:nth-child(2) { animation-delay: 0.2s; }
+.music-badge__dots span:nth-child(3) { animation-delay: 0.4s; }
+.music-badge__notes {
+  animation: noteFloat 1.8s ease-in-out infinite;
+  display: inline-block;
+}
+@keyframes badgeFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes dotBounce {
+  0%, 80%, 100% { opacity: 0.3; transform: translateY(0); }
+  40%           { opacity: 1;   transform: translateY(-3px); }
+}
+@keyframes noteFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-3px); }
+}

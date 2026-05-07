@@ -1082,7 +1082,7 @@ function init3DTilt() {
       events: {
         onReady(ev) {
           playerReady = true;
-          if (wantPlay) { wantPlay = false; ev.target.playVideo(); }
+          ev.target.playVideo(); // attempt autoplay; blocked on mobile until user gesture
         },
         onStateChange(ev) {
           playing = (ev.data === 1 || ev.data === 3);
@@ -1093,10 +1093,15 @@ function init3DTilt() {
   }
 
   function sync() {
-    const btn = document.getElementById('music-btn');
-    if (!btn) return;
-    btn.classList.toggle('is-playing', playing);
-    btn.setAttribute('aria-label', playing ? 'Pause music' : 'Play music');
+    const btn   = document.getElementById('music-btn');
+    const badge = document.getElementById('music-badge');
+    if (btn) {
+      btn.classList.toggle('is-playing', playing);
+      btn.setAttribute('aria-label', playing ? 'Pause music' : 'Play music');
+    }
+    if (badge) {
+      badge.style.display = playing ? 'flex' : 'none';
+    }
   }
 
   function setupBtn() {
