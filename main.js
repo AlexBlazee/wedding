@@ -1012,7 +1012,7 @@ function initPhotoUpload() {
     const anyError = queue.some(i => i.status === 'error');
 
     if (!anyError) {
-      showToast('photo-toast', '🌸 Your memories have been shared! Thank you for capturing these beautiful moments.', 'success');
+      showToast('photo-toast', 'Your memories have been shared! Thank you for capturing these beautiful moments.', 'success');
       uploadBtn.style.display = 'none';
     } else {
       showToast('photo-toast', 'Some photos could not be uploaded. Please retry or check your connection.', 'error');
